@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: OKF Specification
+    url: https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md
+    about: The official OKF specification
+  - name: yzfly/awesome-okf
+    url: https://github.com/yzfly/awesome-okf
+    about: The original Chinese OKF resource hub

@@ -1,0 +1,45 @@
+name: Bug Report
+description: Report a problem with the catalog, CLI, or converter
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for reporting! Please fill in the details below.
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Which version are you using? (run `awesome-okf --version` or check pyproject.toml)
+      placeholder: e.g. 0.1.0
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe the issue and include the full error message if any.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Minimal steps to trigger the problem.
+      placeholder: |
+        1. Run command...
+        2. Observe...
+    validations:
+      required: true
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      options:
+        - catalog data
+        - CLI
+        - MCP meta-server
+        - convert-to-okf
+        - README/docs
+    validations:
+      required: true

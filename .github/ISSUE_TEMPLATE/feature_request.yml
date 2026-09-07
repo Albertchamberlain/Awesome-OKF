@@ -1,0 +1,28 @@
+name: Feature Request
+description: Suggest a new OKF resource or a feature
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for the suggestion!
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would you like?
+      description: Describe the resource or feature.
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: URL (for new catalog entries)
+      description: Link to the OKF resource if applicable.
+      placeholder: https://github.com/...
+  - type: textarea
+    id: why
+    attributes:
+      label: Why should this be in Awesome-OKF?
+      description: How does it benefit the OKF ecosystem?
+    validations:
+      required: true
