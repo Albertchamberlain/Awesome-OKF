@@ -33,6 +33,17 @@ entries:
     official: false
     tags: [cli, python, validation, packaging]
 
+  - id: convert-to-okf
+    name: convert-to-okf
+    kind: tool
+    category: conversion
+    url: https://github.com/Albertchamberlain/Awesome-OKF
+    description: CLI tool to convert Markdown awesome-xx lists, JSON arrays, and URL lists into OKF knowledge bundles — zero dependencies, standard library only.
+    platform: [cli]
+    official: false
+    tags: [conversion, cli, markdown, json, zero-dependency]
+
+
   # === Producer Plugins ===
   - id: feishu-to-okf
     name: feishu-to-okf
@@ -246,6 +257,67 @@ entries:
     platform: [web]
     official: false
     tags: [example, llm, karpathy]
+
+  - id: okf-official-spec
+    name: OKF Specification (Official)
+    kind: doc
+    category: spec
+    url: https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md
+    description: Google's official OKF v0.2 specification — the canonical reference for the format.
+    platform: [web]
+    official: true
+    tags: [spec, official, google]
+
+  - id: okf-discovery
+    name: OKF Discovery Protocol (KEP-1)
+    kind: proposal
+    category: upstream
+    url: https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/proposals/discovery.md
+    description: Proposal for a standard discovery mechanism that lets agents find OKF bundles without hardcoding paths.
+    platform: [web]
+    official: true
+    tags: [discovery, upstream, kep]
+
+  - id: okf-trust-signals
+    name: Trust Signals (KEP-2)
+    kind: proposal
+    category: upstream
+    url: https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/proposals/trust-signals.md
+    description: Proposal for verification chains and trust tiering so consumers can distinguish machine-confirmed from human-reviewed content.
+    platform: [web]
+    official: true
+    tags: [trust, verification, upstream, kep]
+
+  - id: okf-python-sdk
+    name: OKF Python SDK
+    kind: tool
+    category: sdk
+    url: https://github.com/GoogleCloudPlatform/knowledge-catalog/tree/main/tools/python
+    description: Official Python SDK for reading, validating, and writing OKF bundles — referenced by Google as the reference implementation.
+    platform: [python]
+    official: true
+    tags: [sdk, python, official]
+
+  - id: llm-wiki
+    name: LLM Wiki (Karpathy)
+    kind: doc
+    category: example
+    url: https://github.com/karpathy/llm-wiki
+    description: The original LLM knowledge base by Andrej Karpathy that inspired OKF — a living wiki of LLM concepts as Markdown files.
+    platform: [web]
+    official: false
+    tags: [example, llm, karpathy, inspiration]
+
+  - id: okf-super-corpus
+    name: OKF Super Corpus
+    kind: doc
+    category: example
+    url: https://github.com/GoogleCloudPlatform/knowledge-catalog/tree/main/okf-super-corpus
+    description: A large-scale example OKF bundle curated by Google Cloud — demonstrates the format at scale across multiple domains.
+    platform: [web]
+    official: true
+    tags: [example, large-scale, google]
+
 
   - id: okf-spec-market
     name: OKF Market Concept
