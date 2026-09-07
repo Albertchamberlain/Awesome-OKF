@@ -10,34 +10,30 @@
       <stop offset="1" stop-color="#e0e7ff"/>
     </linearGradient>
   </defs>
-  <circle cx="64" cy="64" r="60" fill="url(#bg)"/>
+  <circle cx="64" cy="64" r="62" fill="url(#bg)"/>
 
   <!-- Knowledge graph nodes (OKF links) -->
-  <line x1="30" y1="38" x2="52" y2="58" stroke="#c7d2fe" stroke-width="2" stroke-linecap="round" opacity="0.8"/>
-  <line x1="98" y1="30" x2="76" y2="54" stroke="#c7d2fe" stroke-width="2" stroke-linecap="round" opacity="0.8"/>
-  <line x1="30" y1="94" x2="52" y2="74" stroke="#c7d2fe" stroke-width="2" stroke-linecap="round" opacity="0.8"/>
-  <line x1="98" y1="98" x2="76" y2="78" stroke="#c7d2fe" stroke-width="2" stroke-linecap="round" opacity="0.8"/>
-  <circle cx="30" cy="38" r="5" fill="#a5b4fc" opacity="0.9"/>
-  <circle cx="98" cy="30" r="5" fill="#a5b4fc" opacity="0.9"/>
-  <circle cx="30" cy="94" r="5" fill="#a5b4fc" opacity="0.9"/>
-  <circle cx="98" cy="98" r="5" fill="#a5b4fc" opacity="0.9"/>
+  <line x1="20" y1="28" x2="44" y2="52" stroke="#c7d2fe" stroke-width="2" stroke-linecap="round" opacity="0.8"/>
+  <line x1="108" y1="20" x2="84" y2="48" stroke="#c7d2fe" stroke-width="2" stroke-linecap="round" opacity="0.8"/>
+  <line x1="20" y1="104" x2="44" y2="80" stroke="#c7d2fe" stroke-width="2" stroke-linecap="round" opacity="0.8"/>
+  <line x1="108" y1="108" x2="84" y2="84" stroke="#c7d2fe" stroke-width="2" stroke-linecap="round" opacity="0.8"/>
+  <circle cx="20" cy="28" r="6" fill="#a5b4fc" opacity="0.9"/>
+  <circle cx="108" cy="20" r="6" fill="#a5b4fc" opacity="0.9"/>
+  <circle cx="20" cy="104" r="6" fill="#a5b4fc" opacity="0.9"/>
+  <circle cx="108" cy="108" r="6" fill="#a5b4fc" opacity="0.9"/>
 
   <!-- Document: Markdown file symbol -->
-  <rect x="47" y="42" width="34" height="44" rx="4" fill="url(#doc)" stroke="#4f46e5" stroke-width="1.5"/>
+  <rect x="40" y="36" width="48" height="56" rx="6" fill="url(#doc)" stroke="#4f46e5" stroke-width="1.5"/>
 
   <!-- YAML frontmatter markers -->
-  <line x1="53" y1="50" x2="75" y2="50" stroke="#818cf8" stroke-width="2" stroke-linecap="round"/>
-  <line x1="53" y1="55" x2="70" y2="55" stroke="#c7d2fe" stroke-width="2" stroke-linecap="round"/>
-  <line x1="53" y1="60" x2="72" y2="60" stroke="#c7d2fe" stroke-width="2" stroke-linecap="round"/>
+  <line x1="49" y1="48" x2="79" y2="48" stroke="#818cf8" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="49" y1="55" x2="73" y2="55" stroke="#c7d2fe" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="49" y1="62" x2="75" y2="62" stroke="#c7d2fe" stroke-width="2.5" stroke-linecap="round"/>
 
   <!-- Separator: YAML to body -->
-  <line x1="53" y1="66" x2="75" y2="66" stroke="#4f46e5" stroke-width="1" stroke-dasharray="3 2" opacity="0.6"/>
+  <line x1="49" y1="70" x2="79" y2="70" stroke="#4f46e5" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.6"/>
 
   <!-- Markdown body text -->
-  <line x1="53" y1="72" x2="74" y2="72" stroke="#6366f1" stroke-width="2.5" stroke-linecap="round"/>
-  <line x1="53" y1="77" x2="68" y2="77" stroke="#818cf8" stroke-width="2" stroke-linecap="round"/>
-  <line x1="53" y1="82" x2="71" y2="82" stroke="#818cf8" stroke-width="2" stroke-linecap="round"/>
-
-  <!-- Brand text -->
-  <text x="64" y="120" text-anchor="middle" fill="#a5b4fc" font-family="system-ui, sans-serif" font-size="9" font-weight="700" letter-spacing="1.5">AWESOME OKF</text>
+  <line x1="49" y1="78" x2="78" y2="78" stroke="#6366f1" stroke-width="3" stroke-linecap="round"/>
+  <line x1="49" y1="85" x2="71" y2="85" stroke="#818cf8" stroke-width="2.5" stroke-linecap="round"/>
 </svg>
