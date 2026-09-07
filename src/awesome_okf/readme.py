@@ -49,13 +49,13 @@ KIND_EMOJI: dict[str, str] = {
 def _format_entry(entry, *, show_kind: bool = False) -> str:
     """Format a single catalog entry as a Markdown list item."""
     official = " ✅" if entry.official else ""
-    transport = f" `{'`, `'.join(entry.transport)}`" if entry.transport else ""
+    platform = f" `{'`, `'.join(entry.platform)}`" if getattr(entry, "platform", None) else ""
     tags = ", ".join(f"`{tag}`" for tag in entry.tags[:4])
     tag_line = f" — {tags}" if tags else ""
 
     return (
-        f"- [{entry.name}]({entry.url}){official}{transport} — "
-        f"{entry.description}{tag_line}{platform}"
+        f"- [{entry.name}]({entry.url}){official}{platform} — "
+        f"{entry.description}{tag_line}"
     )
 
 
@@ -105,7 +105,7 @@ def _section_for_kind(catalog: Catalog, kind: Kind) -> str:
 # ---------------------------------------------------------------------------
 
 _MARKER_RE = re.compile(
-    r"<!--\s*(CATALOG:(?:SERVERS|CLIENTS|REGISTRIES|SDKS)):(START|END)\s*-->"
+    r"<!--\s*(CATALOG:(?:TOOLS|PLUGINS|SKILLS|PROPOSALS|DOCS)):(START|END)\s*-->"
 )
 
 
@@ -334,3 +334,13 @@ def write_readme_zh(
         newline="\n",
     )
     return zh_path
+
+
+def write_readme_lang(lang: str, path=None, catalog=None, template=None):
+    """Render a localized README from README.template.<lang>.md."""
+    resolved_catalog = catalog or load_catalog()
+    out = path or (Path(__file__).resolve().parents[2] / f"README.{lang}.md")
+    tpl = Path(__file__).resolve().parents[2] / f"README.template.{lang}.md"
+    text = template if template is not None else (tpl.read_text(encoding="utf-8") if tpl.is_file() else None)
+    out.write_text(render_readme(resolved_catalog, template=text), encoding="utf-8", newline="\n")
+    return out

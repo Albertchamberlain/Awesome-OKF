@@ -10,11 +10,11 @@
 </p>
 
 <p align="center">
-  <strong>开放知识格式（OKF）精选资源目录。</strong>
+  <strong>オープンナレッジフォーマット（OKF）の厳選リソースカタログ。</strong>
 </p>
 
 <p align="center">
-  YAML 驱动 · Agent 可搜索 · 社区共建
+  YAML駆動 · エージェント検索可能 · コミュニティ運営
 </p>
 
 <p align="center">
@@ -24,29 +24,29 @@
 </p>
 
 <p align="center">
-  <a href="README.md">English</a> | <b>中文</b> | <a href="README.ja.md">日本語</a> | <a href="README.ko.md">한국어</a>
+  <a href="README.md">English</a> | <a href="README.zh.md">中文</a> | <b>日本語</b> | <a href="README.ko.md">한국어</a>
 </p>
 
 <br>
 
 <p align="center">
-  <a href="#catalog"><b>目录</b></a> &ensp;·&ensp;
-  <a href="#connect-to-your-agent"><b>接入 Agent</b></a> &ensp;·&ensp;
+  <a href="#catalog"><b>カタログ</b></a> &ensp;·&ensp;
+  <a href="#connect-to-your-agent"><b>エージェント接続</b></a> &ensp;·&ensp;
   <a href="#cli"><b>CLI</b></a> &ensp;·&ensp;
-  <a href="#contributing"><b>贡献</b></a>
+  <a href="#contributing"><b>貢献</b></a>
 </p>
 
 <br>
 
 ---
 
-## 什么是 OKF
+## OKF とは
 
-[开放知识格式（OKF）](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md) 是 Google Cloud 发布的一份开放规范——把知识定义为一个目录的 Markdown 文件，带 YAML frontmatter，加一小套约定。没有运行时，没有 SDK。
+[オープンナレッジフォーマット（OKF）](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md)は、Google Cloud が公開したオープン仕様です。知識を Markdown ファイルのディレクトリとして定義し、YAML frontmatter と最小限の規約を加えたものです。ランタイムも SDK もありません。
 
-## 本项目有何不同
+## このプロジェクトの違い
 
-Awesome OKF 把整个 OKF 生态收进**一个经过校验的 YAML 目录**，然后生成可浏览的列表、可搜索的 CLI，以及一个 AI Agent 可以直接查询的 MCP meta-server：
+Awesome OKF は、OKF エコシステム全体を**検証済みの単一 YAML カタログ**に集約し、閲覧可能なリスト、検索可能な CLI、そして AI エージェントが直接クエリできる MCP メタサーバーを生成します：
 
 <div align="center">
 
@@ -55,46 +55,46 @@ Awesome OKF 把整个 OKF 生态收进**一个经过校验的 YAML 目录**，�
                            │
           ┌────────────────┼────────────────┐
           ▼                ▼                 ▼
-      README.md         CLI 工具        MCP 服务
-    （人类可浏览）     （可搜索）    （Agent 可查询）
+      README.md         CLI ツール       MCP サーバー
+   （人が閲覧）        （検索可能）   （エージェント検索）
 ```
 
 </div>
 
-> **改一条记录。重新生成文档。随处查询。**
+> **1 レコード編集。ドキュメント再生成。どこからでも再クエリ。**
 
 ---
 
-## 效果演示
+## デモ
 
 ```text
-用户（或 Agent）：
-  "找一个能把 Obsidian 仓库转成 OKF 的插件。"
+ユーザー（またはエージェント）：
+  "Obsidian の vault を OKF に変換するプラグインを探して。"
 
-Agent 调用：
+エージェント呼び出し：
   search_catalog({
     "query": "Obsidian",
     "kind": "plugin",
     "limit": 3
   })
 
-Awesome-OKF 返回：
+Awesome-OKF の応答：
   ┌──────────────────────────────────────────────────────────────┐
   │ obsidian-to-okf                                plugin        │
-  │ 将 Obsidian vault 转为 OKF——wikilink 变成 OKF 链接。          │
-  │ 平台: python  ·  标签: obsidian, wikilink, markdown          │
+  │ Obsidian vault を OKF に変換—wikilink が OKF リンクに。      │
+  │ プラットフォーム: python · タグ: obsidian, wikilink          │
   └──────────────────────────────────────────────────────────────┘
 ```
 
-*让目录开口说 OKF。*
+*カタログが OKF を語る。*
 
 ---
 
-## 快速开始
+## クイックスタート
 
-### 接入你的 Agent
+### エージェントに接続
 
-把 Awesome OKF 添加到任意 MCP 客户端，让 Agent 能发现 OKF 资源：
+任意の MCP クライアントに Awesome OKF を追加：
 
 ```bash
 pipx install awesome-okf
@@ -121,54 +121,54 @@ awesome-okf readme
 
 ---
 
-## 🛠️ 我们的工具
+## 🛠️ 私たちのツール
 
 ### convert-to-okf 🔄
 
-零依赖 CLI，把各种格式转成 OKF 知识库：
+様々な形式を OKF ナレッジバンドルに変換するゼロ依存 CLI：
 
-| 📥 输入格式 | ✨ 功能 |
+| 📥 入力形式 | ✨ 機能 |
 |---|---|
-| 📋 Markdown awesome 列表 | 提取 `- [标题](URL) — 描述` 条目 → OKF 条目 |
-| 📊 JSON 数组 | 转换 `{title, url, description}` 对象 → OKF 条目 |
-| 🔗 URL 列表 | 纯文本 URL 集合 → OKF 条目 |
+| 📋 Markdown awesome リスト | `- [タイトル](URL) — 説明` 項目 → OKF エントリ |
+| 📊 JSON 配列 | `{title, url, description}` オブジェクト → OKF エントリ |
+| 🔗 URL リスト | プレーンテキスト URL → OKF エントリ |
 
 ```bash
-# 一条命令，即刻生成 OKF 知识库
+# 1 コマンドで OKF バンドルを即生成
 python scripts/convert-to-okf.py README.md -o kb/ -t concept
 
-# 输出：kb/ 目录下 45 个带 YAML frontmatter 的 Markdown 文件
-# 可直接：myokf validate kb/
+# 出力: YAML frontmatter 付き Markdown ファイル 45 個
+# そのまま: myokf validate kb/
 ```
 
 ### awesome-okf CLI 🎛️
 
-数据驱动的目录 CLI（与 Awesome-MCP 同架构）：
+データ駆動カタログ CLI（Awesome-MCP と同アーキテクチャ）：
 
-| 🔍 命令 | 📝 用途 |
+| 🔍 コマンド | 📝 用途 |
 |---|---|
-| `awesome-okf search obsidian` | 全目录全文搜索 |
-| `awesome-okf list --kind plugin` | 按类别筛选 |
-| `awesome-okf readme` | 从 catalog.yaml 重新生成 README |
-| `awesome-okf-server` | MCP meta-server——让 AI Agent 查询目录 |
+| `awesome-okf search obsidian` | 全カタログ全文検索 |
+| `awesome-okf list --kind plugin` | カテゴリで絞り込み |
+| `awesome-okf readme` | catalog.yaml から README 再生成 |
+| `awesome-okf-server` | MCP メタサーバー |
 
 ---
 
-## 🔥 热门仓库
+## 🔥 人気リポジトリ
 
-| 🏆 仓库 | 📌 内容 |
+| 🏆 リポジトリ | 📌 内容 |
 |---|---|
-| ⭐ [yzfly/awesome-okf](https://github.com/yzfly/awesome-okf) | 中文世界第一个 OKF 落点 — 7 插件 + 7 Skill + 3 提案 |
-| ⭐ [linyiru/awesome-okf](https://github.com/linyiru/awesome-okf) | 英文 OKF 资源中心 — 规范、工具、示例、指南 |
-| 📚 [GoogleCloudPlatform/knowledge-catalog](https://github.com/GoogleCloudPlatform/knowledge-catalog) | Google 官方 OKF 规范、SDK 与提案 |
-| 🧠 [karpathy/llm-wiki](https://github.com/karpathy/llm-wiki) | 启发 OKF 的 LLM Wiki |
+| ⭐ [yzfly/awesome-okf](https://github.com/yzfly/awesome-okf) | 中国語 OKF ハブ — 7 プラグイン + 7 スキル + 3 提案 |
+| ⭐ [linyiru/awesome-okf](https://github.com/linyiru/awesome-okf) | 英語 OKF ハブ — 仕様、ツール、サンプル |
+| 📚 [GoogleCloudPlatform/knowledge-catalog](https://github.com/GoogleCloudPlatform/knowledge-catalog) | Google 公式 OKF 仕様・SDK |
+| 🧠 [karpathy/llm-wiki](https://github.com/karpathy/llm-wiki) | OKF に影響を与えた LLM Wiki |
 
 ---
 
-## 目录
+## カタログ
 
-> **29 条精选资源** · 4 工具 · 7 插件 · 7 Skill · 5 提案 · 6 文档
-> *精挑细选——不是穷尽索引。*
+> **29 エントリ** · 4 ツール · 7 プラグイン · 7 スキル · 5 提案 · 6 ドキュメント
+> *厳選—網羅的インデックスではありません。*
 
 <!-- CATALOG:TOOLS:START -->
 
@@ -284,7 +284,7 @@ python scripts/convert-to-okf.py README.md -o kb/ -t concept
 
 ---
 
-## 数据模型
+## データモデル
 
 ```yaml
 - id: obsidian-to-okf
@@ -292,7 +292,7 @@ python scripts/convert-to-okf.py README.md -o kb/ -t concept
   kind: plugin
   category: document
   url: https://github.com/yzfly/awesome-okf/tree/main/plugins/obsidian-to-okf
-  description: 将 Obsidian vault 转为 OKF——wikilink 变成 OKF 链接。
+  description: Obsidian vault を OKF に変換。
   platform: [python]
   official: false
   tags: [obsidian, wikilink, markdown]
@@ -300,9 +300,9 @@ python scripts/convert-to-okf.py README.md -o kb/ -t concept
 
 ---
 
-## 贡献
+## 貢献
 
-在 [`data/catalog.yaml`](data/catalog.yaml) 中添加或编辑条目，然后：
+[`data/catalog.yaml`](data/catalog.yaml) にエントリを追加・編集して：
 
 ```bash
 awesome-okf validate
@@ -310,19 +310,19 @@ awesome-okf readme
 pytest
 ```
 
-详见 [`CONTRIBUTING.md`](CONTRIBUTING.md)。
+[`CONTRIBUTING.md`](CONTRIBUTING.md) を参照。
 
 ---
 
-## 相关列表
+## 関連リスト
 
-- [yzfly/awesome-okf](https://github.com/yzfly/awesome-okf) — 中文 OKF 资源中心
-- [OKF 规范](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md) — Google Cloud 官方规范
+- [yzfly/awesome-okf](https://github.com/yzfly/awesome-okf) — 中国語 OKF ハブ
+- [OKF 仕様](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md) — Google Cloud 公式
 
 ---
 
 <br>
 
 <p align="center">
-  <sub>MIT — 见 <a href="LICENSE">LICENSE</a>。目录描述链接到上游项目，遵循其各自许可证。</sub>
+  <sub>MIT — <a href="LICENSE">LICENSE</a> 参照。カタログの説明は上流プロジェクトにリンク。</sub>
 </p>
