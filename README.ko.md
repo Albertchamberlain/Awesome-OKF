@@ -311,6 +311,46 @@ pytest
 ```
 
 [`CONTRIBUTING.md`](CONTRIBUTING.md) 참조.
+---
+
+## 🤖 AI 에이전트용
+
+이 저장소에서 작업하는 AI 에이전트(Claude Code, Codex, Cursor)를 위한 정보:
+
+```
+data/catalog.yaml          # 단일 데이터 소스
+README.template.md         # 영어 템플릿
+README.template.zh.md      # 중국어 템플릿
+README.template.ja.md      # 일본어 템플릿
+README.template.ko.md      # 한국어 템플릿
+src/awesome_okf/           # CLI + MCP 메타 서버
+scripts/convert-to-okf.py  # 형식 변환 도구
+```
+
+**규칙(필수):**
+
+1. **README\*.md를 직접 편집하지 마세요**—생성된 파일입니다. `data/catalog.yaml` 편집 후 `awesome-okf readme` 실행.
+2. **템플릿의 CATALOG 블록을 편집하지 마세요**—`<!-- CATALOG:*:START/END -->`는 자동 생성.
+3. **항목 추가** = YAML 블록 추가 + 재생성 + 테스트 실행.
+4. **커밋 전 검증**: `awesome-okf validate && pytest`
+5. **중복 id 금지**—기존 항목을 제자리에서 편집.
+6. **다국어**: 템플릿 변경 시 4개 언어 모두 동기화.
+
+**유용한 명령:**
+
+```bash
+awesome-okf stats                    # 카테고리별 집계
+awesome-okf list --kind plugin       # 카테고리 필터
+awesome-okf search <query>           # 전체 텍스트 검색
+awesome-okf validate                 # 스키마 검증
+awesome-okf readme                   # 모든 README 재생성
+awesome-okf-server                   # MCP 메타 서버
+```
+
+**MCP 메타 서버**: `awesome-okf-server`로 4개 도구 노출.
+
+---
+
 
 ---
 

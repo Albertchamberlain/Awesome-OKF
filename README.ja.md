@@ -311,6 +311,46 @@ pytest
 ```
 
 [`CONTRIBUTING.md`](CONTRIBUTING.md) を参照。
+---
+
+## 🤖 AI エージェント向け
+
+このリポジトリで作業する AI エージェント（Claude Code、Codex、Cursor）向けの情報：
+
+```
+data/catalog.yaml          # 唯一のデータソース
+README.template.md         # 英語テンプレート
+README.template.zh.md      # 中国語テンプレート
+README.template.ja.md      # 日本語テンプレート
+README.template.ko.md      # 韓国語テンプレート
+src/awesome_okf/           # CLI + MCP メタサーバー
+scripts/convert-to-okf.py  # フォーマット変換ツール
+```
+
+**ルール（必須）：**
+
+1. **README\*.md を直接編集しない**——生成物です。`data/catalog.yaml` を編集後、`awesome-okf readme` を実行。
+2. **テンプレート内の CATALOG ブロックを編集しない**——`<!-- CATALOG:*:START/END -->` は自動生成。
+3. **エントリ追加** = YAML ブロック追加 + 再生成 + テスト実行。
+4. **コミット前に検証**：`awesome-okf validate && pytest`
+5. **重複 id を作らない**——既存エントリをその場で編集。
+6. **多言語**：テンプレートを変更する場合は 4 言語すべて同期。
+
+**便利なコマンド：**
+
+```bash
+awesome-okf stats                    # カテゴリ別集計
+awesome-okf list --kind plugin       # カテゴリで絞り込み
+awesome-okf search <query>           # 全文検索
+awesome-okf validate                 # スキーマ検証
+awesome-okf readme                   # 全 README 再生成
+awesome-okf-server                   # MCP メタサーバー
+```
+
+**MCP メタサーバー**：`awesome-okf-server` で 4 つのツールを公開。
+
+---
+
 
 ---
 

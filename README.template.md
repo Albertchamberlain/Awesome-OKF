@@ -222,6 +222,61 @@ See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the entry schema.
 
 ---
 
+## 🤖 For AI Agents
+
+If you are an AI agent (Claude Code, Codex, Cursor) working on this repo, here's what you need to know:
+
+### Project structure
+
+```
+data/catalog.yaml          # SINGLE SOURCE OF TRUTH — all entries live here
+README.template.md         # English template (hand-written narrative)
+README.template.zh.md      # Chinese template
+README.template.ja.md      # Japanese template
+README.template.ko.md      # Korean template
+src/awesome_okf/           # CLI + MCP meta-server (Python)
+scripts/convert-to-okf.py  # Format converter tool
+```
+
+### Rules (non-negotiable)
+
+1. **Never edit README\*.md directly** — they are generated. Edit `data/catalog.yaml`, then regenerate.
+2. **Never edit the CATALOG blocks** in templates — the `<!-- CATALOG:*:START/END -->` markers are auto-generated.
+3. **Adding an entry** = append a YAML block to `data/catalog.yaml` + regenerate + run tests. Schema:
+   ```yaml
+   - id: kebab-case-id          # unique, never reused
+     name: Human Readable Name
+     kind: tool|plugin|skill|proposal|doc
+     category: free-form-group
+     url: https://...
+     description: One sentence, no marketing fluff.
+     platform: [cli|python|web|claude-code]
+     official: false            # true ONLY for Google/vendor official
+     tags: [3-5 short tags]
+   ```
+4. **Validate before commit**: `awesome-okf validate && pytest`
+5. **Never create duplicate ids** — edit the existing entry in place.
+6. **Multi-language**: if you touch a template, mirror the change in all four templates.
+
+### Useful commands
+
+```bash
+awesome-okf stats                    # entry counts by kind
+awesome-okf list --kind plugin       # filter by kind
+awesome-okf search <query>           # full-text search
+awesome-okf validate                 # schema + duplicate-id check
+awesome-okf readme                   # regenerate all READMEs
+awesome-okf-server                   # MCP meta-server (stdio)
+```
+
+### MCP meta-server
+
+The catalog is exposed to agents via `awesome-okf-server` with four tools:
+`search_catalog`, `list_catalog`, `get_catalog_entry`, `catalog_stats`.
+Connect it to your MCP client to query OKF resources programmatically.
+
+---
+
 ## Related Lists
 
 - [yzfly/awesome-okf](https://github.com/yzfly/awesome-okf) — the original Chinese OKF resource hub

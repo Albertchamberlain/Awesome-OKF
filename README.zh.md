@@ -311,6 +311,46 @@ pytest
 ```
 
 详见 [`CONTRIBUTING.md`](CONTRIBUTING.md)。
+---
+
+## 🤖 写给 AI Agent
+
+如果你是在本仓库工作的 AI Agent（Claude Code、Codex、Cursor），这是你需要知道的：
+
+```
+data/catalog.yaml          # 唯一数据源——所有条目在这里
+README.template.md         # 英文模板（手写叙事）
+README.template.zh.md      # 中文模板
+README.template.ja.md      # 日文模板
+README.template.ko.md      # 韩文模板
+src/awesome_okf/           # CLI + MCP meta-server
+scripts/convert-to-okf.py  # 格式转换工具
+```
+
+**规则（不可违反）：**
+
+1. **永远不要直接编辑 README\*.md**——它们是生成的。改 `data/catalog.yaml` 后运行 `awesome-okf readme`。
+2. **不要编辑模板中的 CATALOG 区块**——`<!-- CATALOG:*:START/END -->` 标记之间是自动生成的。
+3. **添加条目** = 在 `data/catalog.yaml` 追加 YAML 块 + 重新生成 + 跑测试。
+4. **提交前验证**：`awesome-okf validate && pytest`
+5. **不要创建重复 id**——原地编辑现有条目。
+6. **多语言**：改一个模板时，四个模板同步修改。
+
+**常用命令：**
+
+```bash
+awesome-okf stats                    # 按类别统计
+awesome-okf list --kind plugin       # 按类别筛选
+awesome-okf search <query>           # 全文搜索
+awesome-okf validate                 # schema + 重复 id 检查
+awesome-okf readme                   # 重新生成所有 README
+awesome-okf-server                   # MCP meta-server
+```
+
+**MCP meta-server**：通过 `awesome-okf-server` 暴露四个工具（`search_catalog`、`list_catalog`、`get_catalog_entry`、`catalog_stats`），可编程查询 OKF 资源。
+
+---
+
 
 ---
 
