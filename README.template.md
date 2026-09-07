@@ -110,9 +110,53 @@ awesome-okf readme
 
 ---
 
+## 🛠️ Our Tools
+
+### convert-to-okf 🔄
+
+Zero-dependency CLI that converts various formats into OKF knowledge bundles:
+
+| 📥 Input Format | ✨ What It Does |
+|---|---|
+| 📋 Markdown awesome-xx lists | Extracts `- [Title](URL) — Description` items → OKF entries |
+| 📊 JSON arrays | Converts `{title, url, description}` objects → OKF entries |
+| 🔗 URL lists | Plain text URL collections → OKF entries |
+
+```bash
+# One command, instant OKF bundle
+python scripts/convert-to-okf.py README.md -o kb/ -t concept
+
+# Output: kb/ with 45 Markdown files, each with YAML frontmatter
+# Ready for: myokf validate kb/
+```
+
+### awesome-okf CLI 🎛️
+
+The data-driven catalog CLI (same architecture as Awesome-MCP):
+
+| 🔍 Command | 📝 Purpose |
+|---|---|
+| `awesome-okf search obsidian` | Full-text search across all 29 entries |
+| `awesome-okf list --kind plugin` | Filter by category |
+| `awesome-okf readme` | Regenerate this README from catalog.yaml |
+| `awesome-okf-server` | MCP meta-server — let AI agents query the catalog |
+
+---
+
+## 🔥 Popular Repositories
+
+| 🏆 Repository | 📌 What It Offers |
+|---|---|
+| ⭐ [yzfly/awesome-okf](https://github.com/yzfly/awesome-okf) | 中文世界第一个 OKF 落点 — 7 plugins + 7 skills + 3 proposals |
+| ⭐ [linyiru/awesome-okf](https://github.com/linyiru/awesome-okf) | English OKF resource hub — spec, tools, samples, guides |
+| 📚 [GoogleCloudPlatform/knowledge-catalog](https://github.com/GoogleCloudPlatform/knowledge-catalog) | Official OKF spec, SDK, and proposals by Google |
+| 🧠 [karpathy/llm-wiki](https://github.com/karpathy/llm-wiki) | The original LLM Wiki that inspired OKF |
+
+---
+
 ## Catalog
 
-> **25 curated entries** · 1 tool · 7 plugins · 7 skills · 3 proposals · 4 docs
+> **29 curated entries** · 4 tools · 7 plugins · 7 skills · 5 proposals · 6 docs
 > *Deliberately curated — not an exhaustive index.*
 
 <!-- CATALOG:TOOLS:START -->
