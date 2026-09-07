@@ -262,6 +262,13 @@ awesome-okf-server                   # MCP メタサーバー
 
 ---
 
+
+## 📈 スター履歴
+
+<p align="center">
+  <img src="https://api.star-history.com/svg?repos=Albertchamberlain/Awesome-OKF&type=Date&sealed_token=1xyCNq0LSU304WvVyoz3q01A6O39ncWD9GT11VJhawLmHIxNsBKw1-YRnoAsuWgMBnRurnBB8omrhm-vRPkstQ8GqaUuUVhDqJaLv17-ct6SOiHHRYi14Q" alt="Star history chart" width="880" />
+</p>
+
 ## 関連リスト
 
 - [yzfly/awesome-okf](https://github.com/yzfly/awesome-okf) — 中国語 OKF ハブ
