@@ -1,0 +1,248 @@
+# Awesome-OKF catalog — edit this file and run: awesome-okf readme
+meta:
+  version: 1
+  updated: "2026-09-06"
+  description: Curated Open Knowledge Format (OKF) resources — plugins, skills, proposals, and tools
+
+categories:
+  tool:
+    label: Tools & CLI
+    description: Standalone tools and command-line interfaces for OKF
+  plugin:
+    label: Producer Plugins
+    description: Converters that transform external sources into OKF
+  skill:
+    label: Claude Code Skills
+    description: AI-assisted workflows for OKF creation and publishing
+  proposal:
+    label: Proposals & Extensions
+    description: Upstream extension proposals and community RFPs
+  doc:
+    label: Documentation & Specifications
+    description: Official spec translations, guides, and reference materials
+
+entries:
+  # === Tools ===
+  - id: myokf-cli
+    name: myokf-cli
+    kind: tool
+    category: cli
+    url: https://github.com/yzfly/awesome-okf
+    description: Unified CLI for OKF — pull from GitHub, validate, and package to single-file web.
+    platform: [cli]
+    official: false
+    tags: [cli, python, validation, packaging]
+
+  # === Producer Plugins ===
+  - id: feishu-to-okf
+    name: feishu-to-okf
+    kind: plugin
+    category: document
+    url: https://github.com/yzfly/awesome-okf/tree/main/plugins/feishu-to-okf
+    description: Convert Feishu (Lark) knowledge spaces and documents into OKF.
+    platform: [python]
+    official: false
+    tags: [feishu, lark, document, zero-dependency]
+
+  - id: obsidian-to-okf
+    name: obsidian-to-okf
+    kind: plugin
+    category: document
+    url: https://github.com/yzfly/awesome-okf/tree/main/plugins/obsidian-to-okf
+    description: Convert Obsidian vaults to OKF — wikilinks become OKF links.
+    platform: [python]
+    official: false
+    tags: [obsidian, wikilink, markdown, zero-dependency]
+
+  - id: notion-to-okf
+    name: notion-to-okf
+    kind: plugin
+    category: document
+    url: https://github.com/yzfly/awesome-okf/tree/main/plugins/notion-to-okf
+    description: Convert Notion Markdown exports into OKF.
+    platform: [python]
+    official: false
+    tags: [notion, markdown, zero-dependency]
+
+  - id: github-to-okf
+    name: github-to-okf
+    kind: plugin
+    category: code
+    url: https://github.com/yzfly/awesome-okf/tree/main/plugins/github-to-okf
+    description: Extract code symbols from GitHub repositories into OKF.
+    platform: [python]
+    official: false
+    tags: [github, code, symbols, zero-dependency]
+
+  - id: awesome-to-okf
+    name: awesome-to-okf
+    kind: plugin
+    category: list
+    url: https://github.com/yzfly/awesome-okf/tree/main/plugins/awesome-to-okf
+    description: Convert GitHub awesome-xx lists into structured OKF knowledge bases.
+    platform: [python]
+    official: false
+    tags: [awesome-list, conversion, zero-dependency]
+
+  - id: html-to-okf
+    name: html-to-okf
+    kind: plugin
+    category: web
+    url: https://github.com/yzfly/awesome-okf/tree/main/plugins/html-to-okf
+    description: Convert HTML files into OKF.
+    platform: [python]
+    official: false
+    tags: [html, web, zero-dependency]
+
+  - id: myokf-cli-plugin
+    name: myokf-cli (plugin entry)
+    kind: plugin
+    category: cli
+    url: https://github.com/yzfly/awesome-okf/tree/main/plugins/myokf-cli
+    description: Unified CLI entry point wrapping all seven producer plugins.
+    platform: [python]
+    official: false
+    tags: [cli, aggregator, zero-dependency]
+
+  # === Claude Code Skills ===
+  - id: okf-creator
+    name: okf-creator
+    kind: skill
+    category: creation
+    url: https://github.com/yzfly/awesome-okf/tree/main/skills/okf-creator
+    description: Create high-quality OKF knowledge bases from scratch with Claude Code.
+    platform: [claude-code]
+    official: false
+    tags: [creation, knowledge-base]
+
+  - id: awesome-to-okf-skill
+    name: awesome-to-okf (skill)
+    kind: skill
+    category: import
+    url: https://github.com/yzfly/awesome-okf/tree/main/skills/awesome-to-okf
+    description: Import awesome lists and enrich them into OKF with Claude Code.
+    platform: [claude-code]
+    official: false
+    tags: [awesome-list, import, enrichment]
+
+  - id: book-to-okf
+    name: book-to-okf
+    kind: skill
+    category: conversion
+    url: https://github.com/yzfly/awesome-okf/tree/main/skills/book-to-okf
+    description: Split books and long-form articles into interlinked concept knowledge bases.
+    platform: [claude-code]
+    official: false
+    tags: [book, long-form, concepts]
+
+  - id: code-to-okf
+    name: code-to-okf
+    kind: skill
+    category: conversion
+    url: https://github.com/yzfly/awesome-okf/tree/main/skills/code-to-okf
+    description: Convert codebases into OKF with Claude Code.
+    platform: [claude-code]
+    official: false
+    tags: [code, repository, enrichment]
+
+  - id: github-to-okf-skill
+    name: github-to-okf (skill)
+    kind: skill
+    category: import
+    url: https://github.com/yzfly/awesome-okf/tree/main/skills/github-to-okf
+    description: Repository to OKF enrichment workflow with Claude Code.
+    platform: [claude-code]
+    official: false
+    tags: [github, repository, enrichment]
+
+  - id: okf-to-book
+    name: okf-to-book
+    kind: skill
+    category: publishing
+    url: https://github.com/yzfly/awesome-okf/tree/main/skills/okf-to-book
+    description: Publish OKF knowledge bases as VitePress documentation sites.
+    platform: [claude-code]
+    official: false
+    tags: [vitepress, publishing, docs]
+
+  - id: okf-to-web
+    name: okf-to-web
+    kind: skill
+    category: publishing
+    url: https://github.com/yzfly/awesome-okf/tree/main/skills/okf-to-web
+    description: Package OKF into a single-file web page with interactive knowledge graph.
+    platform: [claude-code]
+    official: false
+    tags: [web, single-file, knowledge-graph]
+
+  # === Proposals ===
+  - id: okf-sources-proposal
+    name: Sources & Provenance Extension
+    kind: proposal
+    category: upstream
+    url: https://github.com/yzfly/awesome-okf/tree/main/proposals/sources-provenance.md
+    description: Propose `sources` field and provenance tracking for OKF v0.2.
+    platform: [web]
+    official: false
+    tags: [sources, provenance, upstream]
+
+  - id: okf-attested-computation
+    name: Attested Computation Proposal
+    kind: proposal
+    category: upstream
+    url: https://github.com/yzfly/awesome-okf/tree/main/proposals/attested-computation.md
+    description: Propose verifiable computation records for OKF knowledge entries.
+    platform: [web]
+    official: false
+    tags: [computation, verification, upstream]
+
+  - id: okf-lifecycle-proposal
+    name: Lifecycle & Staleness Proposal
+    kind: proposal
+    category: upstream
+    url: https://github.com/yzfly/awesome-okf/tree/main/proposals/lifecycle-staleness.md
+    description: Propose `status` and `stale_after` lifecycle fields for OKF v0.2.
+    platform: [web]
+    official: false
+    tags: [lifecycle, staleness, upstream]
+
+  # === Documentation ===
+  - id: okf-spec-zh
+    name: OKF Specification (Chinese)
+    kind: doc
+    category: spec
+    url: https://github.com/yzfly/awesome-okf/blob/main/docs/okf-spec-zh.md
+    description: Full Chinese translation of the OKF specification, with mandatory requirements and gaps annotated.
+    platform: [web]
+    official: false
+    tags: [spec, translation, chinese]
+
+  - id: okf-spec-en
+    name: OKF Specification (English)
+    kind: doc
+    category: spec
+    url: https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md
+    description: Official OKF specification by Google Cloud — v0.2 with sources, trust, lifecycle, and attested computation.
+    platform: [web]
+    official: true
+    tags: [spec, english, official]
+
+  - id: okf-blog-zh
+    name: OKF Blog Post (Chinese)
+    kind: doc
+    category: guide
+    url: https://github.com/yzfly/awesome-okf/blob/main/docs/blog-zh.md
+    description: Chinese translation of the OKF launch blog post.
+    platform: [web]
+    official: false
+    tags: [blog, translation, chinese]
+
+  - id: karpathy-llm-wiki
+    name: Karpathy's LLM Wiki (OKF)
+    kind: doc
+    category: example
+    url: https://github.com/yzfly/awesome-okf/blob/main/docs/karpathy-llm-wiki-zh.md
+    description: Karpathy's LLM knowledge base converted to OKF — a real-world example of OKF in action.
+    platform: [web]
+    official: false
+    tags: [example, llm, karpathy]
