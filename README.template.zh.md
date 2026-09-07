@@ -1,4 +1,11 @@
 <p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.svg">
+    <img alt="Awesome OKF" src="assets/logo.svg" width="128">
+  </picture>
+</p>
+
+<p align="center">
   <h1 align="center">Awesome OKF</h1>
 </p>
 
