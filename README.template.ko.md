@@ -255,7 +255,7 @@ awesome-okf readme                   # 모든 README 재생성
 awesome-okf-server                   # MCP 메타 서버
 ```
 
-**MCP 메타 서버**: `awesome-okf-server`로 4개 도구 노출.
+**MCP 메타 서버**: `awesome-okf-server`로 5개 도구 노출 (`convert_to_okf`로 OKF 변환 가능).
 
 ---
 

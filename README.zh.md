@@ -347,7 +347,7 @@ awesome-okf readme                   # 重新生成所有 README
 awesome-okf-server                   # MCP meta-server
 ```
 
-**MCP meta-server**：通过 `awesome-okf-server` 暴露四个工具（`search_catalog`、`list_catalog`、`get_catalog_entry`、`catalog_stats`），可编程查询 OKF 资源。
+**MCP meta-server**：通过 `awesome-okf-server` 暴露四个工具（`search_catalog`、`list_catalog`、`get_catalog_entry`、`catalog_stats`、`convert_to_okf`），可编程查询 OKF 资源。
 
 ---
 

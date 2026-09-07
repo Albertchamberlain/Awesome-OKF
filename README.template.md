@@ -272,7 +272,7 @@ awesome-okf-server                   # MCP meta-server (stdio)
 ### MCP meta-server
 
 The catalog is exposed to agents via `awesome-okf-server` with four tools:
-`search_catalog`, `list_catalog`, `get_catalog_entry`, `catalog_stats`.
+`search_catalog`, `list_catalog`, `get_catalog_entry`, `catalog_stats`, `convert_to_okf`.
 Connect it to your MCP client to query OKF resources programmatically.
 
 ---

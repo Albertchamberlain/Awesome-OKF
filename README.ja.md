@@ -347,7 +347,7 @@ awesome-okf readme                   # 全 README 再生成
 awesome-okf-server                   # MCP メタサーバー
 ```
 
-**MCP メタサーバー**：`awesome-okf-server` で 4 つのツールを公開。
+**MCP メタサーバー**：`awesome-okf-server` で 5 つのツールを公開（`convert_to_okf` で OKF 変換も可能）。
 
 ---
 

@@ -81,6 +81,70 @@ def catalog_stats() -> str:
     )
 
 
+@mcp.tool()
+def convert_to_okf(content: str, format: str = "markdown", entry_type: str = "concept") -> str:
+    """Convert text content into OKF-formatted Markdown entries.
+
+    Accepts markdown link lists (`- [Title](URL) — Description`),
+    JSON arrays of {title, url, description}, or plain URL lists.
+    Returns the OKF entries as YAML-frontmatter Markdown, ready to
+    write into an OKF bundle directory.
+    """
+    import re
+    from datetime import datetime, timezone
+
+    def slugify(text: str) -> str:
+        return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")
+
+    def build_entry(title: str, url: str, description: str) -> str:
+        now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        tags = slugify(title).replace("-", ", ")
+        return (
+            "---\n"
+            f"type: {entry_type}\n"
+            f"title: {title}\n"
+            f"description: {description}\n"
+            f"resource: {url}\n"
+            f"tags: [{tags}]\n"
+            "generated:\n"
+            "  by: awesome-okf-mcp\n"
+            f"  at: {now}\n"
+            "---\n\n"
+            f"# {title}\n\n{description}\n"
+        )
+
+    entries: list[dict] = []
+    if format == "json":
+        import json as _json
+        data = _json.loads(content)
+        if isinstance(data, dict):
+            data = [data]
+        entries = [
+            {"title": d.get("title", ""), "url": d.get("url", ""), "description": d.get("description", "")}
+            for d in data
+        ]
+    else:
+        pattern = re.compile(r"^\s*[-*]\s+\[([^\]]+)]\(([^)]+)\)\s*(?:—\s*(.+))?", re.MULTILINE)
+        for m in pattern.finditer(content):
+            entries.append({
+                "title": m.group(1).strip(),
+                "url": m.group(2).strip(),
+                "description": (m.group(3) or m.group(1)).strip(),
+            })
+
+    if not entries:
+        return json.dumps({"error": "no parseable entries found in content"}, ensure_ascii=False)
+
+    rendered = "\n".join(
+        build_entry(e["title"], e["url"], e["description"]) for e in entries
+    )
+    return json.dumps(
+        {"count": len(entries), "okf_markdown": rendered},
+        ensure_ascii=False,
+        indent=2,
+    )
+
+
 def main() -> None:
     mcp.run()
 
