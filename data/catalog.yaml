@@ -246,3 +246,23 @@ entries:
     platform: [web]
     official: false
     tags: [example, llm, karpathy]
+
+  - id: okf-spec-market
+    name: OKF Market Concept
+    kind: doc
+    category: example
+    url: https://github.com/yzfly/awesome-okf/blob/main/docs/okf-market.md
+    description: A conceptual OKF knowledge market — imagine a marketplace where knowledge entries are traded as verifiable assets.
+    platform: [web]
+    official: false
+    tags: [market, concept, knowledge-economy]
+
+  - id: okf-validator
+    name: OKF Validator (myokf)
+    kind: tool
+    category: quality
+    url: https://github.com/yzfly/awesome-okf
+    description: Built-in OKF schema validator — checks YAML frontmatter, link integrity, and spec compliance.
+    platform: [cli]
+    official: false
+    tags: [validation, quality, schema]
