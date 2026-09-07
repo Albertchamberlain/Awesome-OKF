@@ -1,0 +1,229 @@
+<p align="center">
+  <h1 align="center">Awesome OKF</h1>
+</p>
+
+<p align="center">
+  <strong>开放知识格式（OKF）精选资源目录。</strong>
+</p>
+
+<p align="center">
+  YAML 驱动 · Agent 可搜索 · 社区共建
+</p>
+
+<p align="center">
+  <a href="https://github.com/Albertchamberlain/Awesome-OKF"><img alt="Awesome" src="https://cdn.jsdelivr.net/gh/sindresorhus/awesome@main/media/badge.svg"></a>
+  <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-4c1?logo=open-source-initiative&logoColor=white"></a>
+  <img alt="Catalog" src="https://img.shields.io/badge/catalog-29%20entries-7c3aed">
+</p>
+
+<p align="center">
+  <a href="README.md">English</a> | <b>中文</b>
+</p>
+
+<br>
+
+<p align="center">
+  <a href="#catalog"><b>目录</b></a> &ensp;·&ensp;
+  <a href="#connect-to-your-agent"><b>接入 Agent</b></a> &ensp;·&ensp;
+  <a href="#cli"><b>CLI</b></a> &ensp;·&ensp;
+  <a href="#contributing"><b>贡献</b></a>
+</p>
+
+<br>
+
+---
+
+## 什么是 OKF
+
+[开放知识格式（OKF）](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md) 是 Google Cloud 发布的一份开放规范——把知识定义为一个目录的 Markdown 文件，带 YAML frontmatter，加一小套约定。没有运行时，没有 SDK。
+
+## 本项目有何不同
+
+Awesome OKF 把整个 OKF 生态收进**一个经过校验的 YAML 目录**，然后生成可浏览的列表、可搜索的 CLI，以及一个 AI Agent 可以直接查询的 MCP meta-server：
+
+<div align="center">
+
+```
+                      catalog.yaml
+                           │
+          ┌────────────────┼────────────────┐
+          ▼                ▼                 ▼
+      README.md         CLI 工具        MCP 服务
+    （人类可浏览）     （可搜索）    （Agent 可查询）
+```
+
+</div>
+
+> **改一条记录。重新生成文档。随处查询。**
+
+---
+
+## 效果演示
+
+```text
+用户（或 Agent）：
+  "找一个能把 Obsidian 仓库转成 OKF 的插件。"
+
+Agent 调用：
+  search_catalog({
+    "query": "Obsidian",
+    "kind": "plugin",
+    "limit": 3
+  })
+
+Awesome-OKF 返回：
+  ┌──────────────────────────────────────────────────────────────┐
+  │ obsidian-to-okf                                plugin        │
+  │ 将 Obsidian vault 转为 OKF——wikilink 变成 OKF 链接。          │
+  │ 平台: python  ·  标签: obsidian, wikilink, markdown          │
+  └──────────────────────────────────────────────────────────────┘
+```
+
+*让目录开口说 OKF。*
+
+---
+
+## 快速开始
+
+### 接入你的 Agent
+
+把 Awesome OKF 添加到任意 MCP 客户端，让 Agent 能发现 OKF 资源：
+
+```bash
+pipx install awesome-okf
+```
+
+```json
+{
+  "mcpServers": {
+    "awesome-okf": {
+      "command": "awesome-okf-server"
+    }
+  }
+}
+```
+
+### CLI
+
+```bash
+awesome-okf stats
+awesome-okf list --kind plugin
+awesome-okf search obsidian
+awesome-okf readme
+```
+
+---
+
+## 🛠️ 我们的工具
+
+### convert-to-okf 🔄
+
+零依赖 CLI，把各种格式转成 OKF 知识库：
+
+| 📥 输入格式 | ✨ 功能 |
+|---|---|
+| 📋 Markdown awesome 列表 | 提取 `- [标题](URL) — 描述` 条目 → OKF 条目 |
+| 📊 JSON 数组 | 转换 `{title, url, description}` 对象 → OKF 条目 |
+| 🔗 URL 列表 | 纯文本 URL 集合 → OKF 条目 |
+
+```bash
+# 一条命令，即刻生成 OKF 知识库
+python scripts/convert-to-okf.py README.md -o kb/ -t concept
+
+# 输出：kb/ 目录下 45 个带 YAML frontmatter 的 Markdown 文件
+# 可直接：myokf validate kb/
+```
+
+### awesome-okf CLI 🎛️
+
+数据驱动的目录 CLI（与 Awesome-MCP 同架构）：
+
+| 🔍 命令 | 📝 用途 |
+|---|---|
+| `awesome-okf search obsidian` | 全目录全文搜索 |
+| `awesome-okf list --kind plugin` | 按类别筛选 |
+| `awesome-okf readme` | 从 catalog.yaml 重新生成 README |
+| `awesome-okf-server` | MCP meta-server——让 AI Agent 查询目录 |
+
+---
+
+## 🔥 热门仓库
+
+| 🏆 仓库 | 📌 内容 |
+|---|---|
+| ⭐ [yzfly/awesome-okf](https://github.com/yzfly/awesome-okf) | 中文世界第一个 OKF 落点 — 7 插件 + 7 Skill + 3 提案 |
+| ⭐ [linyiru/awesome-okf](https://github.com/linyiru/awesome-okf) | 英文 OKF 资源中心 — 规范、工具、示例、指南 |
+| 📚 [GoogleCloudPlatform/knowledge-catalog](https://github.com/GoogleCloudPlatform/knowledge-catalog) | Google 官方 OKF 规范、SDK 与提案 |
+| 🧠 [karpathy/llm-wiki](https://github.com/karpathy/llm-wiki) | 启发 OKF 的 LLM Wiki |
+
+---
+
+## 目录
+
+> **29 条精选资源** · 4 工具 · 7 插件 · 7 Skill · 5 提案 · 6 文档
+> *精挑细选——不是穷尽索引。*
+
+<!-- CATALOG:TOOLS:START -->
+
+<!-- CATALOG:TOOLS:END -->
+
+<!-- CATALOG:PLUGINS:START -->
+
+<!-- CATALOG:PLUGINS:END -->
+
+<!-- CATALOG:SKILLS:START -->
+
+<!-- CATALOG:SKILLS:END -->
+
+<!-- CATALOG:PROPOSALS:START -->
+
+<!-- CATALOG:PROPOSALS:END -->
+
+<!-- CATALOG:DOCS:START -->
+
+<!-- CATALOG:DOCS:END -->
+
+---
+
+## 数据模型
+
+```yaml
+- id: obsidian-to-okf
+  name: obsidian-to-okf
+  kind: plugin
+  category: document
+  url: https://github.com/yzfly/awesome-okf/tree/main/plugins/obsidian-to-okf
+  description: 将 Obsidian vault 转为 OKF——wikilink 变成 OKF 链接。
+  platform: [python]
+  official: false
+  tags: [obsidian, wikilink, markdown]
+```
+
+---
+
+## 贡献
+
+在 [`data/catalog.yaml`](data/catalog.yaml) 中添加或编辑条目，然后：
+
+```bash
+awesome-okf validate
+awesome-okf readme
+pytest
+```
+
+详见 [`CONTRIBUTING.md`](CONTRIBUTING.md)。
+
+---
+
+## 相关列表
+
+- [yzfly/awesome-okf](https://github.com/yzfly/awesome-okf) — 中文 OKF 资源中心
+- [OKF 规范](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md) — Google Cloud 官方规范
+
+---
+
+<br>
+
+<p align="center">
+  <sub>MIT — 见 <a href="LICENSE">LICENSE</a>。目录描述链接到上游项目，遵循其各自许可证。</sub>
+</p>

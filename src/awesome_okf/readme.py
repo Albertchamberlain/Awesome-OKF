@@ -316,3 +316,21 @@ def write_readme(
         newline="\n",
     )
     return readme_path
+
+
+def write_readme_zh(
+    path=None,
+    catalog=None,
+    template=None,
+):
+    """Render and write the Chinese README using README.template.zh.md."""
+    resolved_catalog = catalog or load_catalog()
+    zh_path = path or (Path(__file__).resolve().parents[2] / "README.zh.md")
+    zh_template_path = Path(__file__).resolve().parents[2] / "README.template.zh.md"
+    zh_template = template if template is not None else (zh_template_path.read_text(encoding="utf-8") if zh_template_path.is_file() else None)
+    zh_path.write_text(
+        render_readme(resolved_catalog, template=zh_template),
+        encoding="utf-8",
+        newline="\n",
+    )
+    return zh_path

@@ -13,7 +13,11 @@
 <p align="center">
   <a href="https://github.com/Albertchamberlain/Awesome-OKF"><img alt="Awesome" src="https://cdn.jsdelivr.net/gh/sindresorhus/awesome@main/media/badge.svg"></a>
   <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-4c1?logo=open-source-initiative&logoColor=white"></a>
-  <img alt="Catalog" src="https://img.shields.io/badge/catalog-25%20entries-7c3aed">
+  <img alt="Catalog" src="https://img.shields.io/badge/catalog-29%20entries-7c3aed">
+</p>
+
+<p align="center">
+  <b>English</b> | <a href="README.zh.md">中文</a>
 </p>
 
 <br>
