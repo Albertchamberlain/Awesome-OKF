@@ -125,19 +125,27 @@ awesome-okf readme
 
 ### convert-to-okf 🔄
 
-様々な形式を OKF ナレッジバンドルに変換するゼロ依存 CLI：
+お気に入りのプラットフォームのコンテンツを OKF ナレッジバンドルに変換するゼロ依存 CLI：
 
 | 📥 入力形式 | ✨ 機能 |
 |---|---|
 | 📋 Markdown awesome リスト | `- [タイトル](URL) — 説明` 項目 → OKF エントリ |
 | 📊 JSON 配列 | `{title, url, description}` オブジェクト → OKF エントリ |
 | 🔗 URL リスト | プレーンテキスト URL → OKF エントリ |
+| 🐙 GitHub リポジトリ | リポジトリ URL を貼るだけ — メタデータ + README をライブ取得 → OKF エントリ |
+| 📓 Obsidian vault | ローカル vault ディレクトリ → ノートごとに 1 エントリ、wikilink を解決 |
+| 📝 Notion エクスポート | Notion「Markdown でエクスポート」→ ページごとに 1 エントリ |
+| 🦩 Feishu ドキュメント | Feishu からエクスポートした Markdown → ドキュメントごとに 1 エントリ |
 
 ```bash
-# 1 コマンドで OKF バンドルを即生成
+# どのプラットフォームも 1 コマンド
 python scripts/convert-to-okf.py README.md -o kb/ -t concept
+python scripts/convert-to-okf.py https://github.com/GoogleCloudPlatform/knowledge-catalog --format github -o kb/
+python scripts/convert-to-okf.py my-vault/ --format obsidian -o kb/
+python scripts/convert-to-okf.py notion-export/ --format notion -o kb/
+python scripts/convert-to-okf.py feishu-doc.md --format feishu -o kb/
 
-# 出力: YAML frontmatter 付き Markdown ファイル 45 個
+# 出力: YAML frontmatter 付き Markdown ファイル
 # そのまま: myokf validate kb/
 ```
 

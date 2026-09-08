@@ -125,19 +125,27 @@ awesome-okf readme
 
 ### convert-to-okf 🔄
 
-零依赖 CLI，把各种格式转成 OKF 知识库：
+零依赖 CLI，把你常用平台的内容转成 OKF 知识库：
 
 | 📥 输入格式 | ✨ 功能 |
 |---|---|
 | 📋 Markdown awesome 列表 | 提取 `- [标题](URL) — 描述` 条目 → OKF 条目 |
 | 📊 JSON 数组 | 转换 `{title, url, description}` 对象 → OKF 条目 |
 | 🔗 URL 列表 | 纯文本 URL 集合 → OKF 条目 |
+| 🐙 GitHub 仓库 | 直接贴 repo URL——实时抓取元数据 + README → OKF 条目 |
+| 📓 Obsidian 仓库 | 本地 vault 目录 → 每个笔记一个条目，wikilink 自动解析 |
+| 📝 Notion 导出 | Notion「导出为 Markdown」目录 → 每个页面一个条目 |
+| 🦩 飞书文档 | 飞书导出的 Markdown → 每个文档一个条目 |
 
 ```bash
-# 一条命令，即刻生成 OKF 知识库
+# 每个平台，一条命令
 python scripts/convert-to-okf.py README.md -o kb/ -t concept
+python scripts/convert-to-okf.py https://github.com/GoogleCloudPlatform/knowledge-catalog --format github -o kb/
+python scripts/convert-to-okf.py my-vault/ --format obsidian -o kb/
+python scripts/convert-to-okf.py notion-export/ --format notion -o kb/
+python scripts/convert-to-okf.py feishu-doc.md --format feishu -o kb/
 
-# 输出：kb/ 目录下 45 个带 YAML frontmatter 的 Markdown 文件
+# 输出：kb/ 目录下带 YAML frontmatter 的 Markdown 文件
 # 可直接：myokf validate kb/
 ```
 

@@ -125,19 +125,27 @@ awesome-okf readme
 
 ### convert-to-okf 🔄
 
-Zero-dependency CLI that converts various formats into OKF knowledge bundles:
+Zero-dependency CLI that converts content from your favorite platforms into OKF knowledge bundles:
 
 | 📥 Input Format | ✨ What It Does |
 |---|---|
 | 📋 Markdown awesome-xx lists | Extracts `- [Title](URL) — Description` items → OKF entries |
 | 📊 JSON arrays | Converts `{title, url, description}` objects → OKF entries |
 | 🔗 URL lists | Plain text URL collections → OKF entries |
+| 🐙 GitHub repos | Paste a repo URL — metadata + README fetched live → OKF entry |
+| 📓 Obsidian vaults | Local vault directory → one entry per note, wikilinks resolved |
+| 📝 Notion exports | Notion "Export → Markdown" directory → one entry per page |
+| 🦩 Feishu docs | Feishu-exported Markdown → one entry per document |
 
 ```bash
-# One command, instant OKF bundle
+# Every platform, one command
 python scripts/convert-to-okf.py README.md -o kb/ -t concept
+python scripts/convert-to-okf.py https://github.com/GoogleCloudPlatform/knowledge-catalog --format github -o kb/
+python scripts/convert-to-okf.py my-vault/ --format obsidian -o kb/
+python scripts/convert-to-okf.py notion-export/ --format notion -o kb/
+python scripts/convert-to-okf.py feishu-doc.md --format feishu -o kb/
 
-# Output: kb/ with 45 Markdown files, each with YAML frontmatter
+# Output: kb/ with Markdown files, each with YAML frontmatter
 # Ready for: myokf validate kb/
 ```
 

@@ -83,10 +83,11 @@ def catalog_stats() -> str:
 
 @mcp.tool()
 def convert_to_okf(content: str, format: str = "markdown", entry_type: str = "concept") -> str:
-    """Convert text content into OKF-formatted Markdown entries.
+    """Convert content into OKF-formatted Markdown entries.
 
     Accepts markdown link lists (`- [Title](URL) — Description`),
-    JSON arrays of {title, url, description}, or plain URL lists.
+    JSON arrays of {title, url, description}, plain URL lists, or a
+    GitHub repo URL (format="github" — metadata + README fetched live).
     Returns the OKF entries as YAML-frontmatter Markdown, ready to
     write into an OKF bundle directory.
     """
@@ -96,21 +97,22 @@ def convert_to_okf(content: str, format: str = "markdown", entry_type: str = "co
     def slugify(text: str) -> str:
         return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")
 
-    def build_entry(title: str, url: str, description: str) -> str:
+    def build_entry(title: str, url: str, description: str, body: str = "", tags: list[str] | None = None) -> str:
         now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-        tags = slugify(title).replace("-", ", ")
+        tag_str = ", ".join(tags) if tags else slugify(title).replace("-", ", ")
+        body_text = body or description
         return (
             "---\n"
             f"type: {entry_type}\n"
             f"title: {title}\n"
             f"description: {description}\n"
             f"resource: {url}\n"
-            f"tags: [{tags}]\n"
+            f"tags: [{tag_str}]\n"
             "generated:\n"
             "  by: awesome-okf-mcp\n"
             f"  at: {now}\n"
             "---\n\n"
-            f"# {title}\n\n{description}\n"
+            f"# {title}\n\n{description}\n\n{body_text}\n"
         )
 
     entries: list[dict] = []
@@ -123,6 +125,53 @@ def convert_to_okf(content: str, format: str = "markdown", entry_type: str = "co
             {"title": d.get("title", ""), "url": d.get("url", ""), "description": d.get("description", "")}
             for d in data
         ]
+    elif format == "github":
+        import urllib.error
+        import urllib.request
+        import json as _json
+
+        m = re.match(r"https?://github\.com/([^/\s]+)/([^/\s]+?)(?:/.*)?$", content.strip())
+        if not m:
+            return json.dumps({"error": f"not a GitHub repo URL: {content}"}, ensure_ascii=False)
+        owner, repo = m.group(1), m.group(2).removesuffix(".git")
+
+        def api(path: str, raw: bool = False) -> str:
+            headers = {"User-Agent": "awesome-okf-mcp"}
+            if raw:
+                headers["Accept"] = "application/vnd.github.raw"
+            req = urllib.request.Request(f"https://api.github.com/{path}", headers=headers)
+            with urllib.request.urlopen(req, timeout=15) as r:
+                return r.read().decode("utf-8")
+
+        try:
+            meta = _json.loads(api(f"repos/{owner}/{repo}"))
+        except (urllib.error.HTTPError, urllib.error.URLError) as e:
+            return json.dumps({"error": f"GitHub fetch failed for {owner}/{repo}: {e}"}, ensure_ascii=False)
+        readme = ""
+        try:
+            readme = api(f"repos/{owner}/{repo}/readme", raw=True)
+        except (urllib.error.HTTPError, urllib.error.URLError):
+            pass
+        tags = list(meta.get("topics") or [])
+        if not tags and meta.get("language"):
+            tags = [meta["language"].lower()]
+        entries = [{
+            "title": meta.get("full_name", f"{owner}/{repo}"),
+            "url": meta.get("html_url", content),
+            "description": meta.get("description") or meta.get("full_name", content),
+            "tags": tags,
+            "body": readme,
+        }]
+    elif format == "urls":
+        for line in content.splitlines():
+            m = re.match(r"^\s*(https?://\S+)\s*$", line)
+            if m:
+                url = m.group(1)
+                entries.append({
+                    "title": url.rstrip("/").split("/")[-1] or url,
+                    "url": url,
+                    "description": url,
+                })
     else:
         pattern = re.compile(r"^\s*[-*]\s+\[([^\]]+)]\(([^)]+)\)\s*(?:—\s*(.+))?", re.MULTILINE)
         for m in pattern.finditer(content):
@@ -136,7 +185,8 @@ def convert_to_okf(content: str, format: str = "markdown", entry_type: str = "co
         return json.dumps({"error": "no parseable entries found in content"}, ensure_ascii=False)
 
     rendered = "\n".join(
-        build_entry(e["title"], e["url"], e["description"]) for e in entries
+        build_entry(e["title"], e["url"], e["description"], body=e.get("body", ""), tags=e.get("tags"))
+        for e in entries
     )
     return json.dumps(
         {"count": len(entries), "okf_markdown": rendered},

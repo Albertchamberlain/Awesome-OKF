@@ -125,19 +125,27 @@ awesome-okf readme
 
 ### convert-to-okf 🔄
 
-다양한 형식을 OKF 지식 번들로 변환하는 무의존성 CLI:
+좋아하는 플랫폼의 콘텐츠를 OKF 지식 번들로 변환하는 무의존성 CLI:
 
 | 📥 입력 형식 | ✨ 기능 |
 |---|---|
 | 📋 Markdown awesome 목록 | `- [제목](URL) — 설명` 항목 → OKF 항목 |
 | 📊 JSON 배열 | `{title, url, description}` 객체 → OKF 항목 |
 | 🔗 URL 목록 | 일반 텍스트 URL → OKF 항목 |
+| 🐙 GitHub 저장소 | 저장소 URL만 붙여넣기 — 메타데이터 + README 실시간 가져오기 → OKF 항목 |
+| 📓 Obsidian vault | 로컬 vault 디렉터리 → 노트마다 항목 하나, wikilink 자동 해석 |
+| 📝 Notion 내보내기 | Notion「Markdown으로 내보내기」→ 페이지마다 항목 하나 |
+| 🦩 Feishu 문서 | Feishu에서 내보낸 Markdown → 문서마다 항목 하나 |
 
 ```bash
-# 명령 하나로 OKF 번들 즉시 생성
+# 어떤 플랫폼이든 명령 하나
 python scripts/convert-to-okf.py README.md -o kb/ -t concept
+python scripts/convert-to-okf.py https://github.com/GoogleCloudPlatform/knowledge-catalog --format github -o kb/
+python scripts/convert-to-okf.py my-vault/ --format obsidian -o kb/
+python scripts/convert-to-okf.py notion-export/ --format notion -o kb/
+python scripts/convert-to-okf.py feishu-doc.md --format feishu -o kb/
 
-# 출력: YAML frontmatter가 있는 Markdown 파일 45개
+# 출력: YAML frontmatter가 있는 Markdown 파일
 # 바로: myokf validate kb/
 ```
 
