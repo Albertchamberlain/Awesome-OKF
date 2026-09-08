@@ -132,10 +132,16 @@ awesome-okf readme
 | 📋 Markdown awesome 列表 | 提取 `- [标题](URL) — 描述` 条目 → OKF 条目 |
 | 📊 JSON 数组 | 转换 `{title, url, description}` 对象 → OKF 条目 |
 | 🔗 URL 列表 | 纯文本 URL 集合 → OKF 条目 |
+| 🧾 YAML 文件 | `{title, url, description}` 列表/映射——需 pyyaml（可选） |
+| 📑 CSV 表格 | `title/url/description` 列；无 title 列时用第一列 |
+| 🗂️ 键值文本 | 通用 `key: value` 块——frontmatter、properties、自定义格式 |
 | 🐙 GitHub 仓库 | 直接贴 repo URL——实时抓取元数据 + README → OKF 条目 |
 | 📓 Obsidian 仓库 | 本地 vault 目录 → 每个笔记一个条目，wikilink 自动解析 |
 | 📝 Notion 导出 | Notion「导出为 Markdown」目录 → 每个页面一个条目 |
 | 🦩 飞书文档 | 飞书导出的 Markdown → 每个文档一个条目 |
+| 🖋️ Typora 笔记 | 纯 `.md` 文件——指向文件或目录即可，无需转换 |
+| 📕 PDF 文档 | 文本层经 pymupdf 提取（可选依赖）；扫描页打印 OCR 范式 |
+| 🖼️ 扫描件/图片 | 不内置 OCR——打印可执行的 PaddleOCR 范式 |
 
 ```bash
 # 每个平台，一条命令
@@ -144,6 +150,21 @@ python scripts/convert-to-okf.py https://github.com/GoogleCloudPlatform/knowledg
 python scripts/convert-to-okf.py my-vault/ --format obsidian -o kb/
 python scripts/convert-to-okf.py notion-export/ --format notion -o kb/
 python scripts/convert-to-okf.py feishu-doc.md --format feishu -o kb/
+
+# 结构化数据
+python scripts/convert-to-okf.py data.yaml --format yaml -o kb/   # 需：pip install pyyaml
+python scripts/convert-to-okf.py table.csv --format csv -o kb/
+python scripts/convert-to-okf.py notes.properties --format kv -o kb/
+
+# 文本型 PDF
+pip install pymupdf
+python scripts/convert-to-okf.py paper.pdf --format pdf -o kb/
+
+# 扫描件/纯图 PDF → OKF：先本地 OCR（你本地的引擎，不进我们的模型），再转换
+python scripts/convert-to-okf.py scan.png --format image    # 打印 OCR 范式
+pip install paddleocr paddlepaddle
+paddleocr ppocr -i scans/ --type ocr --lang en -o ocr-text/
+python scripts/convert-to-okf.py ocr-text/ --format notion -o kb/
 
 # 输出：kb/ 目录下带 YAML frontmatter 的 Markdown 文件
 # 可直接：myokf validate kb/

@@ -86,8 +86,10 @@ def convert_to_okf(content: str, format: str = "markdown", entry_type: str = "co
     """Convert content into OKF-formatted Markdown entries.
 
     Accepts markdown link lists (`- [Title](URL) — Description`),
-    JSON arrays of {title, url, description}, plain URL lists, or a
-    GitHub repo URL (format="github" — metadata + README fetched live).
+    JSON/YAML arrays of {title, url, description}, CSV tables with
+    title/url/description columns, generic key-value blocks (format="kv"),
+    plain URL lists (format="urls"), or a GitHub repo URL
+    (format="github" — metadata + README fetched live).
     Returns the OKF entries as YAML-frontmatter Markdown, ready to
     write into an OKF bundle directory.
     """
@@ -125,6 +127,66 @@ def convert_to_okf(content: str, format: str = "markdown", entry_type: str = "co
             {"title": d.get("title", ""), "url": d.get("url", ""), "description": d.get("description", "")}
             for d in data
         ]
+    elif format == "yaml":
+        import yaml as _yaml
+        data = _yaml.safe_load(content)
+        if isinstance(data, dict):
+            data = [data]
+        entries = [
+            {"title": str(d.get("title", "")), "url": str(d.get("url", "")),
+             "description": str(d.get("description") or d.get("title", ""))}
+            for d in data if isinstance(d, dict)
+        ]
+    elif format == "csv":
+        import csv as _csv
+        import io
+        reader = _csv.DictReader(io.StringIO(content))
+        rows = list(reader)
+        if "title" in (reader.fieldnames or []):
+            for r in rows:
+                title = (r.get("title") or "").strip()
+                if title:
+                    entries.append({
+                        "title": title,
+                        "url": (r.get("url") or "").strip(),
+                        "description": (r.get("description") or title).strip(),
+                    })
+        else:
+            for r in rows:
+                vals = [str(v).strip() for v in r.values()]
+                title = vals[0] if vals else ""
+                if title:
+                    entries.append({
+                        "title": title,
+                        "url": vals[1] if len(vals) > 1 else "",
+                        "description": vals[2] if len(vals) > 2 else title,
+                    })
+    elif format == "kv":
+        def _flush(cur: dict) -> dict | None:
+            title = cur.get("title") or cur.get("name") or ""
+            if not title:
+                return None
+            return {
+                "title": title,
+                "url": cur.get("url") or cur.get("link") or cur.get("resource") or "",
+                "description": cur.get("description") or cur.get("desc") or cur.get("summary") or title,
+            }
+
+        current: dict[str, str] = {}
+        for line in content.splitlines():
+            s = line.strip()
+            if not s or s == "---":
+                e = _flush(current)
+                if e:
+                    entries.append(e)
+                current = {}
+                continue
+            m = re.match(r"^([A-Za-z_][\w .-]*)\s*[:=]\s*(.+)$", s)
+            if m:
+                current[m.group(1).strip().lower().replace(" ", "_")] = m.group(2).strip().strip("\"'")
+        e = _flush(current)
+        if e:
+            entries.append(e)
     elif format == "github":
         import urllib.error
         import urllib.request

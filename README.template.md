@@ -132,10 +132,16 @@ Zero-dependency CLI that converts content from your favorite platforms into OKF 
 | 📋 Markdown awesome-xx lists | Extracts `- [Title](URL) — Description` items → OKF entries |
 | 📊 JSON arrays | Converts `{title, url, description}` objects → OKF entries |
 | 🔗 URL lists | Plain text URL collections → OKF entries |
+| 🧾 YAML files | Lists/mappings of `{title, url, description}` — needs pyyaml (optional) |
+| 📑 CSV tables | `title/url/description` columns; first column wins when there's no title column |
+| 🗂️ Key-value text | Generic `key: value` blocks — frontmatter, properties files, custom formats |
 | 🐙 GitHub repos | Paste a repo URL — metadata + README fetched live → OKF entry |
 | 📓 Obsidian vaults | Local vault directory → one entry per note, wikilinks resolved |
 | 📝 Notion exports | Notion "Export → Markdown" directory → one entry per page |
 | 🦩 Feishu docs | Feishu-exported Markdown → one entry per document |
+| 🖋️ Typora notes | Plain `.md` files — point at a file or folder, done |
+| 📕 PDF documents | Text layer extracted via pymupdf (optional dep); scanned pages print an OCR recipe |
+| 🖼️ Scans & images | No bundled OCR — prints a ready-to-run PaddleOCR recipe instead |
 
 ```bash
 # Every platform, one command
@@ -144,6 +150,21 @@ python scripts/convert-to-okf.py https://github.com/GoogleCloudPlatform/knowledg
 python scripts/convert-to-okf.py my-vault/ --format obsidian -o kb/
 python scripts/convert-to-okf.py notion-export/ --format notion -o kb/
 python scripts/convert-to-okf.py feishu-doc.md --format feishu -o kb/
+
+# Structured data
+python scripts/convert-to-okf.py data.yaml --format yaml -o kb/   # needs: pip install pyyaml
+python scripts/convert-to-okf.py table.csv --format csv -o kb/
+python scripts/convert-to-okf.py notes.properties --format kv -o kb/
+
+# Text-layer PDFs
+pip install pymupdf
+python scripts/convert-to-okf.py paper.pdf --format pdf -o kb/
+
+# Scans / image-only PDFs → OKF: OCR first (your local engine, never our model), then convert
+python scripts/convert-to-okf.py scan.png --format image    # prints the OCR recipe
+pip install paddleocr paddlepaddle
+paddleocr ppocr -i scans/ --type ocr --lang en -o ocr-text/
+python scripts/convert-to-okf.py ocr-text/ --format notion -o kb/
 
 # Output: kb/ with Markdown files, each with YAML frontmatter
 # Ready for: myokf validate kb/

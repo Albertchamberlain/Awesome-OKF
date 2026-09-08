@@ -66,3 +66,39 @@ def test_fetch_github_rejects_non_repo_url():
     mod = _load()
     with pytest.raises(SystemExit):
         mod.fetch_github("https://example.com/not-a-repo")
+
+
+def test_parse_image_prints_ocr_recipe(tmp_path: Path):
+    mod = _load()
+    scan = tmp_path / "scan.png"
+    scan.write_bytes(b"fake")
+    with pytest.raises(SystemExit) as exc:
+        mod.parse_image(scan)
+    msg = str(exc.value)
+    assert "OCR is not bundled" in msg
+    assert "paddleocr ppocr" in msg
+    assert "convert-to-okf.py ocr-text/" in msg
+
+
+def test_parse_csv_with_and_without_title_column():
+    mod = _load()
+    entries = mod.parse_csv("title,url,description\na,http://a.dev,d1\n")
+    assert entries[0] == {"title": "a", "url": "http://a.dev", "description": "d1"}
+    fallback = mod.parse_csv("名称,链接\n笔记1,http://n.dev\n")
+    assert fallback[0]["title"] == "笔记1"
+    assert fallback[0]["url"] == "http://n.dev"
+
+
+def test_parse_keyvalue_blocks_and_aliases():
+    mod = _load()
+    text = (
+        "title: Note One\nlink: http://one.dev\ndesc: First note\n"
+        "---\nname: Note Two\nurl: http://two.dev\n"
+    )
+    entries = mod.parse_keyvalue(text)
+    assert len(entries) == 2
+    assert entries[0]["title"] == "Note One"
+    assert entries[0]["url"] == "http://one.dev"
+    assert entries[0]["description"] == "First note"
+    assert entries[1]["title"] == "Note Two"
+    assert entries[1]["url"] == "http://two.dev"

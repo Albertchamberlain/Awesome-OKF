@@ -132,10 +132,16 @@ awesome-okf readme
 | 📋 Markdown awesome 목록 | `- [제목](URL) — 설명` 항목 → OKF 항목 |
 | 📊 JSON 배열 | `{title, url, description}` 객체 → OKF 항목 |
 | 🔗 URL 목록 | 일반 텍스트 URL → OKF 항목 |
+| 🧾 YAML 파일 | `{title, url, description}` 목록/매핑 — pyyaml(선택) 필요 |
+| 📑 CSV 테이블 | `title/url/description` 열; title 열이 없으면 첫 열 사용 |
+| 🗂️ 키-값 텍스트 | 범용 `key: value` 블록 — frontmatter, properties, 커스텀 형식 |
 | 🐙 GitHub 저장소 | 저장소 URL만 붙여넣기 — 메타데이터 + README 실시간 가져오기 → OKF 항목 |
 | 📓 Obsidian vault | 로컬 vault 디렉터리 → 노트마다 항목 하나, wikilink 자동 해석 |
 | 📝 Notion 내보내기 | Notion「Markdown으로 내보내기」→ 페이지마다 항목 하나 |
 | 🦩 Feishu 문서 | Feishu에서 내보낸 Markdown → 문서마다 항목 하나 |
+| 🖋️ Typora 노트 | 일반 `.md` 파일 — 변환 불필요, 파일/폴더만 지정 |
+| 📕 PDF 문서 | pymupdf(선택 의존성)로 텍스트 레이어 추출; 스캔 페이지는 OCR 레시피 출력 |
+| 🖼️ 스캔/이미지 | OCR 미내장 — 바로 실행 가능한 PaddleOCR 레시피 출력 |
 
 ```bash
 # 어떤 플랫폼이든 명령 하나
@@ -144,6 +150,21 @@ python scripts/convert-to-okf.py https://github.com/GoogleCloudPlatform/knowledg
 python scripts/convert-to-okf.py my-vault/ --format obsidian -o kb/
 python scripts/convert-to-okf.py notion-export/ --format notion -o kb/
 python scripts/convert-to-okf.py feishu-doc.md --format feishu -o kb/
+
+# 구조화 데이터
+python scripts/convert-to-okf.py data.yaml --format yaml -o kb/   # 필요: pip install pyyaml
+python scripts/convert-to-okf.py table.csv --format csv -o kb/
+python scripts/convert-to-okf.py notes.properties --format kv -o kb/
+
+# 텍스트 레이어 PDF
+pip install pymupdf
+python scripts/convert-to-okf.py paper.pdf --format pdf -o kb/
+
+# 스캔/이미지 전용 PDF → OKF: 로컬 OCR 먼저(로컬 엔진, 우리 모델 미사용), 그다음 변환
+python scripts/convert-to-okf.py scan.png --format image    # OCR 레시피 출력
+pip install paddleocr paddlepaddle
+paddleocr ppocr -i scans/ --type ocr --lang en -o ocr-text/
+python scripts/convert-to-okf.py ocr-text/ --format notion -o kb/
 
 # 출력: YAML frontmatter가 있는 Markdown 파일
 # 바로: myokf validate kb/
