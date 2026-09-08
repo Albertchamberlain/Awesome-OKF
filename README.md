@@ -21,6 +21,7 @@
   <a href="https://github.com/Albertchamberlain/Awesome-OKF"><img alt="Awesome" src="https://cdn.jsdelivr.net/gh/sindresorhus/awesome@main/media/badge.svg"></a>
   <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-4c1?logo=open-source-initiative&logoColor=white"></a>
   <img alt="Catalog" src="https://img.shields.io/badge/catalog-29%20entries-7c3aed">
+  <img alt="OKF Anything" src="https://img.shields.io/badge/OKF-Anything-7c3aed">
 </p>
 
 <p align="center">
@@ -62,6 +63,33 @@ Awesome OKF keeps the entire OKF ecosystem in **one validated YAML catalog**, th
 </div>
 
 > **Edit one record. Regenerate the docs. Re-query from anywhere.**
+
+---
+
+## 🌐 OKF Anything
+
+**Anything readable → OKF.** Every format above — and any you invent — collapses into one intermediate shape, then bundles into OKF:
+
+```
+        ┌────────── EXTRACT ──────────┐   ┌── NORMALIZE ──┐   ┌──── BUNDLE ────┐
+        │  Markdown · Typora · PDF    │   │  title         │   │  # title       │
+        │  Obsidian · Notion · Feishu │ → │  url           │ → │  description   │
+        │  GitHub · JSON · YAML       │   │  description   │   │  resource      │
+        │  CSV · key-value · OCR      │   │  body / tags   │   │  myokf-ready   │
+        └─────────────────────────────┘   └────────────────┘   └────────────────┘
+```
+
+1. **Extract** — pull readable text out of any source. Platform exports and local engines (pymupdf, PaddleOCR) do the lifting; **nothing runs through our model**.
+2. **Normalize** — every format reduces to `title / url / description` (+ optional `body`, `tags`).
+3. **Bundle** — render the intermediate shape into a myokf-validatable OKF directory.
+
+`--format anything` is the programmatic form: feed it arbitrary text and it walks the parser chain (list → JSON → key-value → URLs → line-per-row) until one sticks:
+
+```bash
+python scripts/convert-to-okf.py whatever.txt --format anything -o kb/
+```
+
+The MCP tool `convert_to_okf` speaks the same idea — an agent hands it arbitrary text, it hands back OKF.
 
 ---
 

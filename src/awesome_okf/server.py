@@ -81,6 +81,90 @@ def catalog_stats() -> str:
     )
 
 
+def _parse_kv(text: str) -> list[dict]:
+    """Generic key: value blocks → {title, url, description} entries.
+
+    Key aliases: title/name, url/link/resource, description/desc/summary.
+    A blank line or `---` starts a new entry.
+    """
+    import re
+
+    def flush(cur: dict[str, str]) -> dict | None:
+        title = cur.get("title") or cur.get("name") or ""
+        if not title:
+            return None
+        return {
+            "title": title,
+            "url": cur.get("url") or cur.get("link") or cur.get("resource") or "",
+            "description": cur.get("description") or cur.get("desc") or cur.get("summary") or title,
+        }
+
+    entries: list[dict] = []
+    current: dict[str, str] = {}
+    for line in text.splitlines():
+        s = line.strip()
+        if not s or s == "---":
+            e = flush(current)
+            if e:
+                entries.append(e)
+            current = {}
+            continue
+        m = re.match(r"^([A-Za-z_][\w .-]*)\s*[:=]\s*(.+)$", s)
+        if m:
+            current[m.group(1).strip().lower().replace(" ", "_")] = m.group(2).strip().strip("\"'")
+    e = flush(current)
+    if e:
+        entries.append(e)
+    return entries
+
+
+def _parse_anything(content: str) -> list[dict]:
+    """OKF Anything fallback chain: list → JSON → key-value → URLs → line-per-row."""
+    import json as _json
+    import re
+
+    entries: list[dict] = []
+    pattern = re.compile(r"^\s*[-*]\s+\[([^\]]+)]\(([^)]+)\)\s*(?:—\s*(.+))?", re.MULTILINE)
+    for m in pattern.finditer(content):
+        entries.append({
+            "title": m.group(1).strip(),
+            "url": m.group(2).strip(),
+            "description": (m.group(3) or m.group(1)).strip(),
+        })
+    if not entries:
+        try:
+            data = _json.loads(content)
+            if isinstance(data, dict):
+                data = [data]
+            if isinstance(data, list):
+                entries = [
+                    {"title": str(d.get("title", "")), "url": str(d.get("url", "")),
+                     "description": str(d.get("description") or d.get("title", ""))}
+                    for d in data if isinstance(d, dict)
+                ]
+        except ValueError:
+            pass
+    if not entries:
+        entries = _parse_kv(content)
+    if not entries:
+        for line in content.splitlines():
+            m = re.match(r"^\s*(https?://\S+)\s*$", line)
+            if m:
+                url = m.group(1)
+                entries.append({
+                    "title": url.rstrip("/").split("/")[-1] or url,
+                    "url": url,
+                    "description": url,
+                })
+    if not entries:
+        entries = [
+            {"title": line.strip(), "url": "", "description": line.strip()}
+            for line in content.splitlines()
+            if line.strip()
+        ]
+    return entries
+
+
 @mcp.tool()
 def convert_to_okf(content: str, format: str = "markdown", entry_type: str = "concept") -> str:
     """Convert content into OKF-formatted Markdown entries.
@@ -88,8 +172,9 @@ def convert_to_okf(content: str, format: str = "markdown", entry_type: str = "co
     Accepts markdown link lists (`- [Title](URL) — Description`),
     JSON/YAML arrays of {title, url, description}, CSV tables with
     title/url/description columns, generic key-value blocks (format="kv"),
-    plain URL lists (format="urls"), or a GitHub repo URL
-    (format="github" — metadata + README fetched live).
+    plain URL lists (format="urls"), a GitHub repo URL
+    (format="github" — metadata + README fetched live), or arbitrary
+    text (format="anything" — walks a parser fallback chain).
     Returns the OKF entries as YAML-frontmatter Markdown, ready to
     write into an OKF bundle directory.
     """
@@ -162,31 +247,9 @@ def convert_to_okf(content: str, format: str = "markdown", entry_type: str = "co
                         "description": vals[2] if len(vals) > 2 else title,
                     })
     elif format == "kv":
-        def _flush(cur: dict) -> dict | None:
-            title = cur.get("title") or cur.get("name") or ""
-            if not title:
-                return None
-            return {
-                "title": title,
-                "url": cur.get("url") or cur.get("link") or cur.get("resource") or "",
-                "description": cur.get("description") or cur.get("desc") or cur.get("summary") or title,
-            }
-
-        current: dict[str, str] = {}
-        for line in content.splitlines():
-            s = line.strip()
-            if not s or s == "---":
-                e = _flush(current)
-                if e:
-                    entries.append(e)
-                current = {}
-                continue
-            m = re.match(r"^([A-Za-z_][\w .-]*)\s*[:=]\s*(.+)$", s)
-            if m:
-                current[m.group(1).strip().lower().replace(" ", "_")] = m.group(2).strip().strip("\"'")
-        e = _flush(current)
-        if e:
-            entries.append(e)
+        entries = _parse_kv(content)
+    elif format == "anything":
+        entries = _parse_anything(content)
     elif format == "github":
         import urllib.error
         import urllib.request

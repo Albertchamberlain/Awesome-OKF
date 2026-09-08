@@ -229,24 +229,47 @@ def parse_keyvalue(text: str) -> list[dict]:
         stripped = line.strip()
         if not stripped or stripped == "---":
             if current:
-                entries.append(_kv_entry(current))
+                entry = _kv_entry(current)
+                if entry:
+                    entries.append(entry)
                 current = {}
             continue
         m = re.match(r"^([A-Za-z_][\w .-]*)\s*[:=]\s*(.+)$", stripped)
         if m:
             current[m.group(1).strip().lower().replace(" ", "_")] = m.group(2).strip().strip("\"'")
     if current:
-        entries.append(_kv_entry(current))
+        entry = _kv_entry(current)
+        if entry:
+            entries.append(entry)
     return entries
 
 
-def _kv_entry(kv: dict[str, str]) -> dict:
+def _kv_entry(kv: dict[str, str]) -> dict | None:
     title = kv.get("title") or kv.get("name") or ""
+    if not title:
+        return None
     return {
         "title": title,
         "url": kv.get("url") or kv.get("link") or kv.get("resource") or "",
         "description": kv.get("description") or kv.get("desc") or kv.get("summary") or title,
     }
+
+
+def parse_anything(text: str) -> list[dict]:
+    """The OKF Anything fallback chain: list → JSON → key-value → URLs → line-per-row."""
+    for parser in (parse_markdown_links, parse_json, parse_keyvalue, parse_url_list):
+        try:
+            entries = parser(text)
+        except (ValueError, TypeError):
+            continue
+        if entries and entries[0].get("title"):
+            return entries
+    # last resort: every non-empty line becomes one entry
+    return [
+        {"title": line.strip(), "url": "", "description": line.strip()}
+        for line in text.splitlines()
+        if line.strip()
+    ]
 
 
 def parse_pdf(input_path: Path) -> list[dict]:
@@ -323,7 +346,7 @@ def main() -> None:
     p.add_argument("input", help="Input file, directory, or GitHub repo URL")
     p.add_argument("-o", "--output", default="./okf-bundle", help="Output directory")
     p.add_argument("-t", "--type", default="concept", help="OKF entry type (default: concept)")
-    p.add_argument("--format", choices=["auto", "markdown", "json", "yaml", "csv", "kv", "urls", "github", "obsidian", "notion", "feishu", "typora", "pdf", "image"], default="auto", help="Input format")
+    p.add_argument("--format", choices=["auto", "anything", "markdown", "json", "yaml", "csv", "kv", "urls", "github", "obsidian", "notion", "feishu", "typora", "pdf", "image"], default="auto", help="Input format")
     args = p.parse_args()
 
     fmt = args.format
@@ -345,7 +368,7 @@ def main() -> None:
         elif re.search(r"\.(png|jpe?g|tiff?|bmp|webp)$", args.input, re.IGNORECASE):
             fmt = "image"
         else:
-            fmt = "markdown"
+            fmt = "anything"
 
     if fmt == "github":
         entries = [fetch_github(args.input)]
@@ -366,6 +389,8 @@ def main() -> None:
     elif fmt == "image":
         parse_image(Path(args.input))
         entries = []  # unreachable — parse_image always exits with the recipe
+    elif fmt == "anything":
+        entries = parse_anything(Path(args.input).read_text(encoding="utf-8"))
     else:
         entries = parse_markdown_links(Path(args.input).read_text(encoding="utf-8"))
 

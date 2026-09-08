@@ -8,11 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **OKF Anything** concept — anything readable → OKF in three stages: Extract → Normalize → Bundle
+- `--format anything` fallback chain: list → JSON → key-value → URLs → line-per-row
+- `convert-to-okf` input coverage: GitHub, Obsidian, Notion, Feishu, Typora, YAML, CSV, key-value, text-layer PDF (pymupdf), OCR recipes for scans (PaddleOCR)
+- MCP `convert_to_okf` formats: github, urls, yaml, csv, kv, anything
 - `convert-to-okf` CLI — convert Markdown lists, JSON arrays, and URL lists into OKF bundles
 - Multi-language README (English, 中文, 日本語, 한국어)
 - "For AI Agents" section — agent-oriented contribution guide
-- Star history chart with owner sealed token
 - OKF logo (light/dark variants)
+
+### Removed
+- Star history chart (per maintainer request)
 
 ## [0.1.0] - 2026-09-07
 

@@ -21,6 +21,7 @@
   <a href="https://github.com/Albertchamberlain/Awesome-OKF"><img alt="Awesome" src="https://cdn.jsdelivr.net/gh/sindresorhus/awesome@main/media/badge.svg"></a>
   <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-4c1?logo=open-source-initiative&logoColor=white"></a>
   <img alt="Catalog" src="https://img.shields.io/badge/catalog-29%20entries-7c3aed">
+  <img alt="OKF Anything" src="https://img.shields.io/badge/OKF-Anything-7c3aed">
 </p>
 
 <p align="center">
@@ -62,6 +63,33 @@ Awesome OKF는 OKF 생태계 전체를 **검증된 단일 YAML 카탈로그**로
 </div>
 
 > **레코드 하나 편집. 문서 재생성. 어디서든 재쿼리.**
+
+---
+
+## 🌐 OKF Anything
+
+**읽을 수 있는 모든 것은 OKF로.** 위의 모든 형식—그리고 여러분이 만드는 어떤 형식도—하나의 중간 구조로 수렴한 뒤 OKF로 번들링됩니다:
+
+```
+        ┌────────── EXTRACT ──────────┐   ┌── NORMALIZE ──┐   ┌──── BUNDLE ────┐
+        │  Markdown · Typora · PDF    │   │  title         │   │  # title       │
+        │  Obsidian · Notion · Feishu │ → │  url           │ → │  description   │
+        │  GitHub · JSON · YAML       │   │  description   │   │  resource      │
+        │  CSV · key-value · OCR      │   │  body / tags   │   │  myokf-ready   │
+        └─────────────────────────────┘   └────────────────┘   └────────────────┘
+```
+
+1. **Extract** — 어떤 소스에서든 읽을 수 있는 텍스트를 추출. 플랫폼 내보내기와 로컬 엔진(pymupdf, PaddleOCR)이 담당—**우리 모델은 사용하지 않음**.
+2. **Normalize** — 모든 형식을 `title / url / description`(+ 선택 `body`, `tags`)으로 환원.
+3. **Bundle** — 중간 구조를 myokf 검증 가능한 OKF 디렉터리로 렌더링.
+
+`--format anything`은 프로그램적 형태: 임의 텍스트를 넣으면 파서 체인(리스트 → JSON → 키-값 → URL → 줄 단위)을 순서대로 시도:
+
+```bash
+python scripts/convert-to-okf.py whatever.txt --format anything -o kb/
+```
+
+MCP 도구 `convert_to_okf`도 같은 아이디어—에이전트가 임의 텍스트를 주면 OKF를 돌려줍니다.
 
 ---
 

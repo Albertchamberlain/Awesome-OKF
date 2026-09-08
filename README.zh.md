@@ -21,6 +21,7 @@
   <a href="https://github.com/Albertchamberlain/Awesome-OKF"><img alt="Awesome" src="https://cdn.jsdelivr.net/gh/sindresorhus/awesome@main/media/badge.svg"></a>
   <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-4c1?logo=open-source-initiative&logoColor=white"></a>
   <img alt="Catalog" src="https://img.shields.io/badge/catalog-29%20entries-7c3aed">
+  <img alt="OKF Anything" src="https://img.shields.io/badge/OKF-Anything-7c3aed">
 </p>
 
 <p align="center">
@@ -62,6 +63,33 @@ Awesome OKF 把整个 OKF 生态收进**一个经过校验的 YAML 目录**，�
 </div>
 
 > **改一条记录。重新生成文档。随处查询。**
+
+---
+
+## 🌐 OKF Anything
+
+**任何可读的东西，都能变成 OKF。** 上面所有格式——以及你发明的任何格式——都先坍缩成一个中间结构，再打包成 OKF：
+
+```
+        ┌────────── 提取 ──────────┐   ┌── 归一化 ──┐   ┌──── 打包 ────┐
+        │  Markdown · Typora · PDF │   │  title     │   │  # 标题       │
+        │  Obsidian · Notion · 飞书 │ → │  url       │ → │  描述         │
+        │  GitHub · JSON · YAML    │   │  description│   │  资源         │
+        │  CSV · 键值 · OCR        │   │  body/tags │   │  myokf 可用   │
+        └──────────────────────────┘   └────────────┘   └───────────────┘
+```
+
+1. **提取**——从任何来源抽出可读文本。平台导出和本地引擎（pymupdf、PaddleOCR）干活——**不经过我们的模型**。
+2. **归一化**——所有格式坍缩成 `title / url / description`（可选 `body`、`tags`）。
+3. **打包**——中间结构渲染成 myokf 可验证的 OKF 目录。
+
+`--format anything` 是它的程序化形态：喂任意文本，自动走解析链（列表 → JSON → 键值 → URL → 逐行）直到命中：
+
+```bash
+python scripts/convert-to-okf.py whatever.txt --format anything -o kb/
+```
+
+MCP 工具 `convert_to_okf` 同理——Agent 塞任意文本，拿回 OKF。
 
 ---
 

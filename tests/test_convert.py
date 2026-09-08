@@ -89,6 +89,18 @@ def test_parse_csv_with_and_without_title_column():
     assert fallback[0]["url"] == "http://n.dev"
 
 
+def test_parse_anything_fallback_chain():
+    mod = _load()
+    assert mod.parse_anything("- [A](http://a.dev) — d1\n")[0]["title"] == "A"
+    assert mod.parse_anything('[{"title": "J", "url": "u", "description": "d"}]\n')[0]["title"] == "J"
+    kv = mod.parse_anything("title: K\nurl: http://k.dev\n")[0]
+    assert kv["title"] == "K" and kv["url"] == "http://k.dev"
+    urls = mod.parse_anything("https://example.com/one\n")[0]
+    assert urls["title"] == "one"
+    lines = mod.parse_anything("just some text\nsecond line\n")
+    assert [e["title"] for e in lines] == ["just some text", "second line"]
+
+
 def test_parse_keyvalue_blocks_and_aliases():
     mod = _load()
     text = (
