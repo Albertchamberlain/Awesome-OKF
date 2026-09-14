@@ -43,6 +43,16 @@ entries:
     official: false
     tags: [conversion, cli, markdown, json, zero-dependency]
 
+  - id: binder
+    name: binder
+    kind: tool
+    category: conversion
+    url: https://github.com/ghchinoy/binder
+    description: Go CLI that converts an existing plain-markdown corpus into a conformant OKF v0.2 bundle, resolving the corpus link web (markdown links and wikilinks) into OKF relationships — with validate, a stdio MCP server, and an agent plugin.
+    platform: [cli]
+    official: false
+    tags: [conversion, go, markdown, wikilink, validation, mcp]
+
 
   # === Producer Plugins ===
   - id: feishu-to-okf
