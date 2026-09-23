@@ -354,7 +354,7 @@ entries:
     kind: tool
     category: quality
     url: https://github.com/Jidoseal/jidoseal-mcp
-    description: Scans a folder of OKF v0.2 markdown on your own machine and grades it Bronze, Silver or Gold against ISO 9001 7.5.2 and ISO 30401 field requirements; the MCP server is Apache-2.0, the scan engine (PyPI, jidoseal.com) is free but proprietary, and an optional signed certificate is paid.
+    description: Scans a folder of OKF v0.2 markdown on your own machine and grades it Bronze, Silver or Gold on OKF's own required field plus frontmatter fields that evidence ISO 9001 7.5.2 and ISO 30401; the MCP server is Apache-2.0, the scan engine (PyPI, jidoseal.com) is free but proprietary, and an optional signed certificate is paid.
     platform: [cli]
     official: false
     tags: [certification, validation, governance, mcp]
