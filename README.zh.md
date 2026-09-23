@@ -242,6 +242,7 @@ python scripts/convert-to-okf.py ocr-text/ --format notion -o kb/
 
 ### Quality
 
+- [JidoSeal](https://github.com/Jidoseal/jidoseal-mcp) `cli` — Scans a folder of OKF v0.2 markdown on your own machine and grades it Bronze, Silver or Gold against ISO 9001 7.5.2 and ISO 30401 field requirements; the MCP server is Apache-2.0, the scan engine (PyPI, jidoseal.com) is free but proprietary, and an optional signed certificate is paid. — `certification`, `validation`, `governance`, `mcp`
 - [OKF Validator (myokf)](https://github.com/yzfly/awesome-okf) `cli` — Built-in OKF schema validator — checks YAML frontmatter, link integrity, and spec compliance. — `validation`, `quality`, `schema`
 
 ### SDK

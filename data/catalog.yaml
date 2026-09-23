@@ -348,3 +348,13 @@ entries:
     platform: [cli]
     official: false
     tags: [validation, quality, schema]
+
+  - id: jidoseal
+    name: JidoSeal
+    kind: tool
+    category: quality
+    url: https://github.com/Jidoseal/jidoseal-mcp
+    description: Scans a folder of OKF v0.2 markdown on your own machine and grades it Bronze, Silver or Gold against ISO 9001 7.5.2 and ISO 30401 field requirements; the MCP server is Apache-2.0, the scan engine (PyPI, jidoseal.com) is free but proprietary, and an optional signed certificate is paid.
+    platform: [cli]
+    official: false
+    tags: [certification, validation, governance, mcp]
