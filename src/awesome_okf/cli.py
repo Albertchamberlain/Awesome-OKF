@@ -10,7 +10,7 @@ from rich.console import Console
 from rich.table import Table
 
 from .catalog import Kind, load_catalog
-from .readme import render_readme, write_readme
+from .readme import README_LANGS, render_readme, write_readme, write_readme_lang
 
 app = typer.Typer(
     add_completion=False, no_args_is_help=True, help="Browse and maintain the Awesome-OKF catalog."
@@ -115,6 +115,10 @@ def generate_readme(
         return
     written_path = write_readme(target, catalog)
     console.print(f"Wrote [bold]{written_path}[/bold]")
+    if output is None:
+        # The default run keeps every localized README in sync with its template
+        for lang in README_LANGS:
+            console.print(f"Wrote [bold]{write_readme_lang(lang, catalog=catalog)}[/bold]")
 
 
 @app.command("validate")

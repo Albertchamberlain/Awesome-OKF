@@ -24,6 +24,10 @@ from .catalog import Catalog, Kind, load_catalog
 TEMPLATE_NAME = "README.template.md"
 OUTPUT_NAME = "README.md"
 
+# Localized READMEs: README.template.<lang>.md renders to README.<lang>.md.
+# Adding a language = add its template and list its code here.
+README_LANGS: tuple[str, ...] = ("zh", "ja", "ko", "ru")
+
 KIND_ORDER: tuple[Kind, ...] = ("tool", "plugin", "skill", "proposal", "doc")
 KIND_TO_MARKER: dict[Kind, str] = {
     "tool": "CATALOG:TOOLS",
