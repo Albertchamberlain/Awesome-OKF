@@ -16,6 +16,24 @@ pytest
 
 3. Open a PR with a short note on why the project belongs in the list
 
+## Regenerating READMEs
+
+`README.md` and every localized `README.<lang>.md` are generated — edit `README.template*.md` and `data/catalog.yaml`, never the READMEs themselves.
+
+| Command | What it does |
+|---|---|
+| `awesome-okf readme` | Renders the complete set (English + every language in `README_LANGS`) and writes it next to the templates |
+| `awesome-okf readme --check` | Writes nothing; exits 1 and names every README of the complete set that is out of date |
+| `awesome-okf readme --output FILE` | Renders only the English README to `FILE`; localized READMEs are not touched |
+| `awesome-okf readme --output FILE --check` | Checks only `FILE` against the English README |
+| `awesome-okf readme --root DIR` | Uses the templates in `DIR` instead of looking for them from the current directory |
+
+- The templates and the READMEs live in one directory: `--root`, or the nearest parent of the current directory that contains `README.template.md`. Outside a checkout the command fails instead of writing anywhere else.
+- A missing or malformed template (each `CATALOG:*` block needs exactly one `START`/`END` pair) is an error, exit code 2. A localized README is never filled from the English template.
+- Everything is rendered before anything is written, and files are replaced atomically: a failed run leaves all READMEs as they were.
+
+To add a language, create `README.template.<lang>.md`, add its code to `README_LANGS` in `src/awesome_okf/readme.py`, link it from the language switcher of every template, and run `awesome-okf readme`.
+
 ## Entry schema
 
 ```yaml

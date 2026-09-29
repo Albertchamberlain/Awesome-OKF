@@ -12,7 +12,11 @@ Everything outside those markers is hand-maintained Markdown.
 
 from __future__ import annotations
 
+import contextlib
+import os
 import re
+import shutil
+from collections.abc import Mapping
 from pathlib import Path
 
 from .catalog import Catalog, Kind, load_catalog
@@ -288,8 +292,179 @@ def _render_fallback(catalog: Catalog) -> str:
 
 
 # ---------------------------------------------------------------------------
+# README set: one root directory, every language a sibling inside it
+# ---------------------------------------------------------------------------
+
+class ReadmeError(RuntimeError):
+    """The README set cannot be rendered or written safely."""
+
+
+def _check_lang(lang: str) -> str:
+    """Reject language codes that are not registered in ``README_LANGS``."""
+    if lang not in README_LANGS:
+        raise ReadmeError(
+            f"Unknown README language {lang!r}. Registered: {', '.join(README_LANGS)}."
+        )
+    return lang
+
+
+def template_name(lang: str | None = None) -> str:
+    """Template file name for ``lang`` (``None`` is the English default)."""
+    return TEMPLATE_NAME if lang is None else f"README.template.{_check_lang(lang)}.md"
+
+
+def output_name(lang: str | None = None) -> str:
+    """README file name for ``lang`` (``None`` is the English default)."""
+    return OUTPUT_NAME if lang is None else f"README.{_check_lang(lang)}.md"
+
+
+def resolve_readme_root(root: Path | None = None) -> Path:
+    """Resolve the single directory that holds the templates and the READMEs.
+
+    Parameters
+    ----------
+    root : Path | None
+        Explicit directory.  If None, the nearest directory at or above the
+        current working directory that contains ``README.template.md``.
+
+    The result never depends on where the package is installed, so a run can
+    not end up writing into ``site-packages``.
+    """
+    if root is not None:
+        resolved = root.resolve()
+        if not (resolved / TEMPLATE_NAME).is_file():
+            raise ReadmeError(f"{resolved} does not contain {TEMPLATE_NAME}.")
+        return resolved
+
+    cwd = Path.cwd().resolve()
+    for candidate in (cwd, *cwd.parents):
+        if (candidate / TEMPLATE_NAME).is_file():
+            return candidate
+    raise ReadmeError(
+        f"No {TEMPLATE_NAME} in {cwd} or any parent directory. "
+        "Run inside an Awesome-OKF checkout or pass --root."
+    )
+
+
+def _validate_template(text: str, source: Path) -> None:
+    """Reject templates whose catalog markers would make rendering lossy.
+
+    An unclosed START marker makes ``render_readme`` drop the rest of the file.
+    """
+    found = [m.groups() for line in text.splitlines() if (m := _MARKER_RE.match(line.strip()))]
+    expected = [
+        (name, edge) for name in sorted(KIND_TO_MARKER.values()) for edge in ("START", "END")
+    ]
+    # Blocks may come in any order, but each START must be followed by its own END
+    blocks = sorted(zip(found[::2], found[1::2]))
+    if len(found) % 2 or [marker for block in blocks for marker in block] != expected:
+        raise ReadmeError(
+            f"{source} must contain exactly one START/END marker pair for each of: "
+            f"{', '.join(KIND_TO_MARKER.values())}."
+        )
+
+
+def read_template(root: Path, lang: str | None = None) -> str:
+    """Read and validate the template for ``lang`` from ``root``.
+
+    A missing template is an error: falling back to another language would
+    overwrite a localized README with the wrong content.
+    """
+    path = root / template_name(lang)
+    if not path.is_file():
+        raise ReadmeError(f"Missing template {path}; {output_name(lang)} was not generated.")
+    text = path.read_text(encoding="utf-8")
+    _validate_template(text, path)
+    return text
+
+
+def render_readme_set(root: Path, catalog: Catalog) -> dict[Path, str]:
+    """Render README.md and every localized README in memory.
+
+    Nothing is written here, so a template problem in any language aborts the
+    run before a single README on disk has changed.
+    """
+    return {
+        root / output_name(lang): render_readme(catalog, template=read_template(root, lang))
+        for lang in (None, *README_LANGS)
+    }
+
+
+def stale_readmes(rendered: Mapping[Path, str]) -> list[Path]:
+    """Return the READMEs on disk that are missing or differ from ``rendered``."""
+    return [
+        path
+        for path, text in rendered.items()
+        if not path.is_file() or path.read_text(encoding="utf-8") != text
+    ]
+
+
+# ---------------------------------------------------------------------------
 # Write to disk
 # ---------------------------------------------------------------------------
+
+def _restore(originals: Mapping[Path, bytes | None]) -> list[Path]:
+    """Put back READMEs replaced by a failed run; returns those that could not be."""
+    failed: list[Path] = []
+    for target, original in originals.items():
+        try:
+            if original is None:
+                target.unlink(missing_ok=True)
+            else:
+                target.write_bytes(original)
+        except OSError:
+            failed.append(target)
+    return failed
+
+
+def write_readme_set(rendered: Mapping[Path, str]) -> list[Path]:
+    """Write already-rendered READMEs without leaving the set half-updated.
+
+    Every file is first staged as a temporary sibling.  Targets are replaced
+    (``os.replace``) only once all of them are staged, and a failed replacement
+    restores the READMEs replaced before it.
+    """
+    staged: list[tuple[Path, Path]] = []
+    replaced: dict[Path, bytes | None] = {}
+    try:
+        for target, text in rendered.items():
+            tmp = target.with_name(f".{target.name}.{os.getpid()}.tmp")
+            staged.append((tmp, target))
+            tmp.write_bytes(text.encode("utf-8"))
+            if target.is_file():
+                shutil.copymode(target, tmp)
+        for tmp, target in staged:
+            original = target.read_bytes() if target.is_file() else None
+            os.replace(tmp, target)
+            replaced[target] = original
+    except OSError as exc:
+        unrestored = _restore(replaced)
+        outcome = (
+            f"Could not restore: {', '.join(str(path) for path in unrestored)}."
+            if unrestored
+            else "No README was changed."
+        )
+        raise ReadmeError(f"Failed to write READMEs: {exc}. {outcome}") from exc
+    finally:
+        for tmp, _ in staged:
+            with contextlib.suppress(OSError):
+                tmp.unlink(missing_ok=True)
+    return list(rendered)
+
+
+def _write_one(
+    lang: str | None,
+    path: Path | None,
+    catalog: Catalog | None,
+    template: str | None,
+) -> Path:
+    name = output_name(lang)  # validates lang before any path is built
+    root = resolve_readme_root() if path is None or template is None else None
+    text = template if template is not None else read_template(root, lang)
+    out = path or root / name
+    write_readme_set({out: render_readme(catalog or load_catalog(), template=text)})
+    return out
+
 
 def write_readme(
     path: Path | None = None,
@@ -301,25 +476,20 @@ def write_readme(
     Parameters
     ----------
     path : Path | None
-        Output path.  Defaults to ``REPO_ROOT/README.md``.
+        Output path.  Defaults to ``README.md`` in the README root
+        (see ``resolve_readme_root``).
     catalog : Catalog | None
         Catalog to render.  Loads the default catalog if omitted.
     template : str | None
-        Template text.  Reads ``README.template.md`` if omitted.
+        Template text.  Reads ``README.template.md`` from the README root if
+        omitted; a missing template raises ``ReadmeError``.
 
     Returns
     -------
     Path
         Path to the written file.
     """
-    resolved_catalog = catalog or load_catalog()
-    readme_path = path or (Path(__file__).resolve().parents[2] / OUTPUT_NAME)
-    readme_path.write_text(
-        render_readme(resolved_catalog, template=template),
-        encoding="utf-8",
-        newline="\n",
-    )
-    return readme_path
+    return _write_one(None, path, catalog, template)
 
 
 def write_readme_zh(
@@ -328,23 +498,13 @@ def write_readme_zh(
     template=None,
 ):
     """Render and write the Chinese README using README.template.zh.md."""
-    resolved_catalog = catalog or load_catalog()
-    zh_path = path or (Path(__file__).resolve().parents[2] / "README.zh.md")
-    zh_template_path = Path(__file__).resolve().parents[2] / "README.template.zh.md"
-    zh_template = template if template is not None else (zh_template_path.read_text(encoding="utf-8") if zh_template_path.is_file() else None)
-    zh_path.write_text(
-        render_readme(resolved_catalog, template=zh_template),
-        encoding="utf-8",
-        newline="\n",
-    )
-    return zh_path
+    return write_readme_lang("zh", path=path, catalog=catalog, template=template)
 
 
 def write_readme_lang(lang: str, path=None, catalog=None, template=None):
-    """Render a localized README from README.template.<lang>.md."""
-    resolved_catalog = catalog or load_catalog()
-    out = path or (Path(__file__).resolve().parents[2] / f"README.{lang}.md")
-    tpl = Path(__file__).resolve().parents[2] / f"README.template.{lang}.md"
-    text = template if template is not None else (tpl.read_text(encoding="utf-8") if tpl.is_file() else None)
-    out.write_text(render_readme(resolved_catalog, template=text), encoding="utf-8", newline="\n")
-    return out
+    """Render a localized README from README.template.<lang>.md.
+
+    ``lang`` must be registered in ``README_LANGS``; a missing template raises
+    ``ReadmeError`` instead of falling back to the English one.
+    """
+    return _write_one(_check_lang(lang), path, catalog, template)

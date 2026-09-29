@@ -7,10 +7,19 @@ from typing import Optional
 
 import typer
 from rich.console import Console
+from rich.markup import escape
 from rich.table import Table
 
 from .catalog import Kind, load_catalog
-from .readme import README_LANGS, render_readme, write_readme, write_readme_lang
+from .readme import (
+    ReadmeError,
+    read_template,
+    render_readme,
+    render_readme_set,
+    resolve_readme_root,
+    stale_readmes,
+    write_readme_set,
+)
 
 app = typer.Typer(
     add_completion=False, no_args_is_help=True, help="Browse and maintain the Awesome-OKF catalog."
@@ -98,27 +107,52 @@ def get_entry(
 
 @app.command("readme")
 def generate_readme(
-    output: Optional[Path] = typer.Option(None, "--output", "-o", help="README path"),
+    output: Optional[Path] = typer.Option(
+        None,
+        "--output",
+        "-o",
+        help="Write (or --check) only the English README at this path; "
+        "localized READMEs are skipped",
+    ),
+    root: Optional[Path] = typer.Option(
+        None,
+        "--root",
+        help="Directory holding README.template*.md; READMEs are written next to them "
+        "(default: nearest parent of the cwd with README.template.md)",
+    ),
     catalog_path: Optional[Path] = typer.Option(None, "--catalog"),
-    check: bool = typer.Option(False, "--check", help="Exit 1 if README would change"),
+    check: bool = typer.Option(
+        False, "--check", help="Write nothing; exit 1 and list every README that would change"
+    ),
 ) -> None:
-    """Generate README.md from catalog.yaml."""
+    """Generate README.md and every localized README from catalog.yaml.
+
+    Without --output the complete set (English + all registered languages) is
+    rendered from the templates in the README root and written next to them.
+    With --output only the English README is rendered, to that path.
+    --check applies to the same files the run would otherwise write.
+    """
     catalog = load_catalog(catalog_path)
-    target = output or Path("README.md")
-    if check:
-        expected = render_readme(catalog)
-        actual = target.read_text(encoding="utf-8") if target.is_file() else None
-        if actual != expected:
-            console.print("[red]README.md is out of date. Run: awesome-mcp readme[/red]")
-            raise typer.Exit(code=1)
-        console.print(f"[green]README.md is current:[/green] {target}")
-        return
-    written_path = write_readme(target, catalog)
-    console.print(f"Wrote [bold]{written_path}[/bold]")
-    if output is None:
-        # The default run keeps every localized README in sync with its template
-        for lang in README_LANGS:
-            console.print(f"Wrote [bold]{write_readme_lang(lang, catalog=catalog)}[/bold]")
+    try:
+        readme_root = resolve_readme_root(root)
+        if output is None:
+            rendered = render_readme_set(readme_root, catalog)
+        else:
+            rendered = {output: render_readme(catalog, template=read_template(readme_root))}
+        if check:
+            stale = stale_readmes(rendered)
+            for path in stale:
+                console.print(f"[red]Out of date:[/red] {escape(str(path))}", soft_wrap=True)
+            if stale:
+                console.print("Run: awesome-okf readme")
+                raise typer.Exit(code=1)
+            console.print(f"[green]{len(rendered)} README file(s) are current[/green]")
+            return
+        for path in write_readme_set(rendered):
+            console.print(f"Wrote [bold]{escape(str(path))}[/bold]", soft_wrap=True)
+    except ReadmeError as exc:
+        console.print(f"[red]{escape(str(exc))}[/red]", soft_wrap=True)
+        raise typer.Exit(code=2) from exc
 
 
 @app.command("validate")
