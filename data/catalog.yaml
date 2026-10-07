@@ -348,3 +348,13 @@ entries:
     platform: [cli]
     official: false
     tags: [validation, quality, schema]
+
+  - id: kl4a
+    name: KL4A (Knowledge Layer For Agents)
+    kind: tool
+    category: conversion
+    url: https://github.com/CogniSwitch/KL4A
+    description: Turns SOP, policy and regulation documents (PDF, DOCX, text) into OKF v0.2 bundles - every claim carries the exact source span it came from, and nothing is marked verified until a human approves it.
+    platform: [cli, desktop]
+    official: false
+    tags: [document, review, provenance, mcp]
