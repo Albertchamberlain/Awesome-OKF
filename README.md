@@ -239,6 +239,7 @@ The data-driven catalog CLI (same architecture as Awesome-MCP):
 
 - [binder](https://github.com/ghchinoy/binder) `cli` — Go CLI that converts an existing plain-markdown corpus into a conformant OKF v0.2 bundle, resolving the corpus link web (markdown links and wikilinks) into OKF relationships — with validate, a stdio MCP server, and an agent plugin. — `conversion`, `go`, `markdown`, `wikilink`
 - [convert-to-okf](https://github.com/Albertchamberlain/Awesome-OKF) `cli` — CLI tool to convert Markdown awesome-xx lists, JSON arrays, and URL lists into OKF knowledge bundles — zero dependencies, standard library only. — `conversion`, `cli`, `markdown`, `json`
+- [KL4A (Knowledge Layer For Agents)](https://github.com/CogniSwitch/KL4A) `cli`, `desktop` — Turns SOP, policy and regulation documents (PDF, DOCX, text) into OKF v0.2 bundles - every claim carries the exact source span it came from, and nothing is marked verified until a human approves it. — `document`, `review`, `provenance`, `mcp`
 
 ### Quality
 
