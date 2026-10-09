@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Installation contract: replace nonexistent `okf>=1.6.0,<2` PyPI dependency with `mcp` (used by `awesome-okf-server`)
+
 ### Added
 - **OKF Anything** concept — anything readable → OKF in three stages: Extract → Normalize → Bundle
 - `--format anything` fallback chain: list → JSON → key-value → URLs → line-per-row

@@ -12,7 +12,9 @@ license = { text = "MIT" }
 authors = [{ name = "Albertchamberlain" }]
 keywords = ["okf", "model-context-protocol", "awesome-list", "ai"]
 dependencies = [
-    "okf>=1.6.0,<2",
+    # OKF is a folder/Markdown convention (see README), not a PyPI package.
+    # The MCP meta-server needs the official MCP Python SDK (FastMCP).
+    "mcp>=1.6.0,<3",
     "pyyaml>=6.0.2",
     "typer>=0.15.0",
     "rich>=13.9.0",
