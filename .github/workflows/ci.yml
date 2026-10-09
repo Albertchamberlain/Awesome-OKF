@@ -30,3 +30,18 @@ jobs:
 
       - name: Check README sync
         run: git diff --exit-code README.md
+
+  clean-install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Clean editable install
+        run: |
+          python -m venv .venv
+          .venv/bin/pip install -e ".[dev]"
+          .venv/bin/awesome-okf stats
+          .venv/bin/python -c "import awesome_okf.server"
+          .venv/bin/pytest -q
