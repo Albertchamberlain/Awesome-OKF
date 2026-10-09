@@ -25,7 +25,7 @@
 </p>
 
 <p align="center">
-  <b>English</b> | <a href="README.zh.md">中文</a> | <a href="README.ja.md">日本語</a> | <a href="README.ko.md">한국어</a>
+  <b>English</b> | <a href="README.zh.md">中文</a> | <a href="README.ja.md">日本語</a> | <a href="README.ko.md">한국어</a> | <a href="README.ru.md">Русский</a>
 </p>
 
 <br>
@@ -384,6 +384,7 @@ README.template.md         # English template (hand-written narrative)
 README.template.zh.md      # Chinese template
 README.template.ja.md      # Japanese template
 README.template.ko.md      # Korean template
+README.template.ru.md      # Russian template
 src/awesome_okf/           # CLI + MCP meta-server (Python)
 scripts/convert-to-okf.py  # Format converter tool
 ```
@@ -406,7 +407,7 @@ scripts/convert-to-okf.py  # Format converter tool
    ```
 4. **Validate before commit**: `awesome-okf validate && pytest`
 5. **Never create duplicate ids** — edit the existing entry in place.
-6. **Multi-language**: if you touch a template, mirror the change in all four templates.
+6. **Multi-language**: if you touch a template, mirror the change in all five templates.
 
 ### Useful commands
 

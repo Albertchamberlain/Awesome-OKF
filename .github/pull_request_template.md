@@ -10,7 +10,7 @@
 
 - [ ] Entry added to `data/catalog.yaml` (not just README)
 - [ ] `awesome-okf validate` passes
-- [ ] `awesome-okf readme` regenerated (all 4 languages)
+- [ ] `awesome-okf readme` regenerated (all languages)
 - [ ] `pytest` passes
 - [ ] No duplicate entry ids
 - [ ] `official: false` unless this is a Google/vendor official resource

@@ -25,7 +25,7 @@
 </p>
 
 <p align="center">
-  <a href="README.md">English</a> | <a href="README.zh.md">中文</a> | <b>日本語</b> | <a href="README.ko.md">한국어</a>
+  <a href="README.md">English</a> | <a href="README.zh.md">中文</a> | <b>日本語</b> | <a href="README.ko.md">한국어</a> | <a href="README.ru.md">Русский</a>
 </p>
 
 <br>
@@ -288,6 +288,7 @@ README.template.md         # 英語テンプレート
 README.template.zh.md      # 中国語テンプレート
 README.template.ja.md      # 日本語テンプレート
 README.template.ko.md      # 韓国語テンプレート
+README.template.ru.md      # ロシア語テンプレート
 src/awesome_okf/           # CLI + MCP メタサーバー
 scripts/convert-to-okf.py  # フォーマット変換ツール
 ```
@@ -299,7 +300,7 @@ scripts/convert-to-okf.py  # フォーマット変換ツール
 3. **エントリ追加** = YAML ブロック追加 + 再生成 + テスト実行。
 4. **コミット前に検証**：`awesome-okf validate && pytest`
 5. **重複 id を作らない**——既存エントリをその場で編集。
-6. **多言語**：テンプレートを変更する場合は 4 言語すべて同期。
+6. **多言語**：テンプレートを変更する場合は 5 言語すべて同期。
 
 **便利なコマンド：**
 

@@ -25,7 +25,7 @@
 </p>
 
 <p align="center">
-  <a href="README.md">English</a> | <a href="README.zh.md">中文</a> | <a href="README.ja.md">日本語</a> | <b>한국어</b>
+  <a href="README.md">English</a> | <a href="README.zh.md">中文</a> | <a href="README.ja.md">日本語</a> | <b>한국어</b> | <a href="README.ru.md">Русский</a>
 </p>
 
 <br>
@@ -381,6 +381,7 @@ README.template.md         # 영어 템플릿
 README.template.zh.md      # 중국어 템플릿
 README.template.ja.md      # 일본어 템플릿
 README.template.ko.md      # 한국어 템플릿
+README.template.ru.md      # 러시아어 템플릿
 src/awesome_okf/           # CLI + MCP 메타 서버
 scripts/convert-to-okf.py  # 형식 변환 도구
 ```
@@ -392,7 +393,7 @@ scripts/convert-to-okf.py  # 형식 변환 도구
 3. **항목 추가** = YAML 블록 추가 + 재생성 + 테스트 실행.
 4. **커밋 전 검증**: `awesome-okf validate && pytest`
 5. **중복 id 금지**—기존 항목을 제자리에서 편집.
-6. **다국어**: 템플릿 변경 시 4개 언어 모두 동기화.
+6. **다국어**: 템플릿 변경 시 5개 언어 모두 동기화.
 
 **유용한 명령:**
 

@@ -25,7 +25,7 @@
 </p>
 
 <p align="center">
-  <a href="README.md">English</a> | <b>中文</b> | <a href="README.ja.md">日本語</a> | <a href="README.ko.md">한국어</a>
+  <a href="README.md">English</a> | <b>中文</b> | <a href="README.ja.md">日本語</a> | <a href="README.ko.md">한국어</a> | <a href="README.ru.md">Русский</a>
 </p>
 
 <br>
@@ -381,6 +381,7 @@ README.template.md         # 英文模板（手写叙事）
 README.template.zh.md      # 中文模板
 README.template.ja.md      # 日文模板
 README.template.ko.md      # 韩文模板
+README.template.ru.md      # 俄文模板
 src/awesome_okf/           # CLI + MCP meta-server
 scripts/convert-to-okf.py  # 格式转换工具
 ```
@@ -392,7 +393,7 @@ scripts/convert-to-okf.py  # 格式转换工具
 3. **添加条目** = 在 `data/catalog.yaml` 追加 YAML 块 + 重新生成 + 跑测试。
 4. **提交前验证**：`awesome-okf validate && pytest`
 5. **不要创建重复 id**——原地编辑现有条目。
-6. **多语言**：改一个模板时，四个模板同步修改。
+6. **多语言**：改一个模板时，五个模板同步修改。
 
 **常用命令：**
 
