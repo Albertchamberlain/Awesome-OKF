@@ -242,7 +242,7 @@ The data-driven catalog CLI (same architecture as Awesome-MCP):
 
 ### Quality
 
-- [JidoSeal](https://github.com/Jidoseal/jidoseal-mcp) `cli` — Lists, per file, the frontmatter fields an OKF v0.2 Markdown folder is missing for three vendor-defined tiers (Bronze: OKF's required `type`; Silver and Gold: vendor-chosen fields meant to evidence selected ISO 9001 7.5.2 and ISO 30401 clauses), locally via a CLI or MCP server. Not ISO certification; not affiliated with or endorsed by ISO or Google. MCP server Apache-2.0; scan engine proprietary, version-pinned with published hashes. No network use during a scan is a vendor claim, not independently audited. Writes .jidoseal/manifest.json and progress.ndjson in the scanned folder. — `validation`, `governance`, `frontmatter`, `mcp`
+- [JidoSeal](https://github.com/Jidoseal/jidoseal-mcp) `cli` — Proprietary, version-pinned scan engine (used via CLI or MCP server) that lists, per file, the frontmatter fields an OKF v0.2 Markdown folder is missing for vendor-defined Bronze/Silver/Gold tiers (not ISO certification; not affiliated with or endorsed by ISO or Google), writes .jidoseal/manifest.json and progress.ndjson into the scanned folder, makes no network calls during a scan (vendor claim, not independently audited), and, only via an opt-in paid checkout tool called with confirm=true, sends company/name/email, tier, score, Merkle root, scan id, and a pricing flag to jidoseal.com/Stripe. — `validation`, `governance`, `frontmatter`, `mcp`
 - [OKF Validator (myokf)](https://github.com/yzfly/awesome-okf) `cli` — Built-in OKF schema validator — checks YAML frontmatter, link integrity, and spec compliance. — `validation`, `quality`, `schema`
 
 ### SDK
