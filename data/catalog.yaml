@@ -348,3 +348,13 @@ entries:
     platform: [cli]
     official: false
     tags: [validation, quality, schema]
+
+  - id: xmatrix
+    name: xMatrix
+    kind: tool
+    category: platform
+    url: https://github.com/LambdaLabsHQ/xmatrix
+    description: Team workspace whose pages clone over git as an OKF v0.2 bundle; pushing an OKF bundle back imports it as pages.
+    platform: [web, cli]
+    official: false
+    tags: [git, workspace, producer, consumer, mcp]
